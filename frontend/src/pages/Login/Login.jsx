@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Login.css';
 
 const Login = () => {
@@ -11,8 +12,17 @@ const Login = () => {
     // TODO: Connect to backend service
   };
 
+  const handleMouseMove = (e) => {
+    const { currentTarget, clientX, clientY } = e;
+    const { left, top } = currentTarget.getBoundingClientRect();
+    const x = clientX - left;
+    const y = clientY - top;
+    currentTarget.style.setProperty('--mouse-x', `${x}px`);
+    currentTarget.style.setProperty('--mouse-y', `${y}px`);
+  };
+
   return (
-    <div className="login-page">
+    <div className="login-page" onMouseMove={handleMouseMove}>
       <div className="login-container">
         <div className="login-header">
           <h2>Bem-vindo de volta</h2>
@@ -21,27 +31,27 @@ const Login = () => {
 
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="input-group">
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder=" "
+              placeholder="exemplo@email.com"
             />
-            <label htmlFor="email">Email</label>
           </div>
 
           <div className="input-group">
+            <label htmlFor="password">Palavra-passe</label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder=" "
+              placeholder="••••••••"
             />
-            <label htmlFor="password">Palavra-passe</label>
           </div>
 
           <div className="login-options">
@@ -58,7 +68,7 @@ const Login = () => {
         </form>
 
         <div className="login-footer">
-          <p>Não tem conta? <a href="#">Registe-se aqui</a></p>
+          <p>Não tem conta? <Link to="/register">Registe-se aqui</Link></p>
         </div>
       </div>
     </div>

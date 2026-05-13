@@ -1,6 +1,6 @@
-/* Login.css - Estilo clean e-commerce tech */
+/* Register.css - Segue o mesmo estilo clean e-commerce tech do Login */
 
-.login-page {
+.register-page {
   height: 100vh;
   width: 100%;
   box-sizing: border-box;
@@ -9,7 +9,7 @@
   justify-content: center;
   background-color: var(--light-gray);
   
-  /* Fundo Dinâmico que segue o rato */
+  /* Fundo Dinâmico que segue o rato (igual ao Login para manter consistência) */
   background-image: radial-gradient(
     600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
     rgba(37, 99, 235, 0.08), 
@@ -22,9 +22,9 @@
   position: relative;
 }
 
-.login-container {
+.register-container {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px; /* Ligeiramente mais largo que o Login para acomodar mais campos confortavelmente */
   background-color: var(--white);
   border-radius: 12px;
   padding: 2.5rem;
@@ -38,32 +38,31 @@
     opacity: 0;
     transform: translateY(15px);
   }
-
   100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.login-header {
+.register-header {
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.login-header h2 {
+.register-header h2 {
   color: var(--dark-blue);
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
 }
 
-.login-header p {
+.register-header p {
   color: var(--text-gray);
   font-size: 0.95rem;
   margin: 0;
 }
 
-.login-form {
+.register-form {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -100,44 +99,7 @@
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.login-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.875rem;
-  margin-top: 0.5rem;
-}
-
-.remember-me {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-gray);
-  cursor: pointer;
-}
-
-.remember-me input[type="checkbox"] {
-  accent-color: var(--primary-blue);
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  border: 1px solid #D1D5DB;
-  border-radius: 4px;
-}
-
-.forgot-password {
-  color: var(--primary-blue);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.forgot-password:hover {
-  color: var(--dark-blue);
-  text-decoration: underline;
-}
-
-.login-button {
+.register-button {
   background-color: var(--primary-blue);
   color: var(--white);
   border: none;
@@ -150,15 +112,15 @@
   margin-top: 0.75rem;
 }
 
-.login-button:hover {
+.register-button:hover {
   background-color: var(--dark-blue);
 }
 
-.login-button:active {
+.register-button:active {
   transform: translateY(1px);
 }
 
-.login-footer {
+.register-footer {
   text-align: center;
   margin-top: 2rem;
   font-size: 0.9rem;
@@ -167,14 +129,14 @@
   padding-top: 1.5rem;
 }
 
-.login-footer a {
+.register-footer a {
   color: var(--primary-blue);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
-.login-footer a:hover {
+.register-footer a:hover {
   color: var(--dark-blue);
   text-decoration: underline;
 }
