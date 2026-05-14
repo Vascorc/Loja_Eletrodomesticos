@@ -1,0 +1,213 @@
+\documentclass[11pt,a4paper,oneside]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{a4paper, left=3cm, right=2.5cm, top=2.5cm, bottom=2.5cm}
+\usepackage{lipsum}
+\usepackage{titlesec}
+\usepackage{setspace}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\lstset{
+  language=Java,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{blue}\bfseries,
+  stringstyle=\color{red},
+  commentstyle=\color{black!60}\itshape,
+  showstringspaces=false,
+  frame=single,
+  breaklines=true,
+  captionpos=b,
+  tabsize=4,
+  aboveskip=1.5em,
+  belowskip=1.5em
+}
+
+\begin{document}
+
+% Capa
+\begin{titlepage}
+    \centering
+    {\scshape\LARGE Universidade da Beira Interior \par}
+    \vspace{0.5cm}
+    {\scshape\Large Departamento de Informática\par}
+    \vspace{1cm}
+    \includegraphics[width=0.4\textwidth]{logo_ubi.png}\par
+    \vspace{1.5cm}
+    {\huge\bfseries Aplicação Web\par}
+    \vspace{0.5cm}
+    \vspace{2cm}
+    {\Large\itshape Elaborado por:\par}
+    Alexandre Santos (52011)\\
+    Daniel Carlos (52578)\\
+    Vasco Colaço (52290)\par
+    \vspace{2cm}
+    {\Large\itshape Unidade Curricular:\par}
+    Sistemas Distribuídos\par
+    \vspace{0.8cm}
+    \vfill
+    {\large \today\par}
+\end{titlepage}
+
+
+\tableofcontents
+\listoffigures
+
+\chapter*{Acrónimos}
+\begin{description}
+    \item[TCP] Transmission Control Protocol
+    \item[IP] Internet Protocol
+    \item[UBI] Universidade da Beira Interior
+    \item[UDP] User Datagram Protocol
+\end{description}
+
+\chapter*{Glossário}
+\begin{description}
+    \item[Socket] Ponto final de uma ligação de comunicação bidirecional entre dois programas através de uma rede de dados.
+    \item[Thread] Linha de execução independente e secundária dentro de um processo principal, permitindo a concorrência computacional.
+\end{description}
+
+<<<<
+\chapter{Introdução}
+
+\section{Enquadramento}
+No âmbito da unidade curricular de Sistemas Distribuídos, foi proposto o desenvolvimento de uma aplicação web completa para uma loja online. O tema escolhido pelo grupo foi uma \textbf{Loja de Eletrodomésticos}, implementada recorrendo à framework Spring para o backend e tecnologias web modernas para o frontend.
+
+Este projeto foca-se na criação de serviços RESTful, persistência de dados e, crucialmente, na segurança e gestão de sessões de utilizadores num ambiente distribuído. Todo o código-fonte pode ser consultado no repositório GitHub do projeto através do endereço \url{https://github.com/Vascorc/Loja_Eletrodomesticos}.
+
+\section{Objetivos}
+O objetivo principal é conceber uma plataforma robusta que permita a gestão de um catálogo de produtos, a realização de compras por clientes registados e a administração de stocks.
+
+Os objetivos específicos incluem:
+\begin{enumerate}
+    \item Implementação de uma API RESTful utilizando Spring Boot.
+    \item Persistência de dados num SGBD relacional (PostgreSQL).
+    \item \textbf{Implementação de um sistema de segurança robusto com autenticação JWT (JSON Web Tokens).}
+    \item Gestão de sessões stateless para garantir escalabilidade.
+    \item Integração do Frontend com o Backend através de serviços assíncronos.
+    \item [Aqui ficará o objetivo relacionado com as Estatísticas/Faturas].
+\end{enumerate}
+====
+\chapter{Introdução}
+
+\section{Enquadramento}
+No âmbito da unidade curricular de Sistemas Distribuídos, foi proposto o desenvolvimento de uma aplicação web completa para uma loja online. O tema escolhido pelo grupo foi uma \textbf{Loja de Eletrodomésticos}, implementada recorrendo à framework Spring para o backend e tecnologias web modernas para o frontend.
+
+Este projeto foca-se na criação de serviços RESTful, persistência de dados e, crucialmente, na segurança e gestão de sessões de utilizadores num ambiente distribuído. Todo o código-fonte pode ser consultado no repositório GitHub do projeto.
+
+\section{Objetivos}
+O objetivo principal é conceber uma plataforma robusta que permita a gestão de um catálogo de produtos, a realização de compras por clientes registados e a administração de stocks.
+
+Os objetivos específicos incluem:
+\begin{enumerate}
+    \item Implementação de uma API RESTful utilizando Spring Boot.
+    \item Persistência de dados num SGBD relacional (PostgreSQL).
+    \item \textbf{Implementação de um sistema de segurança robusto com autenticação JWT (JSON Web Tokens).}
+    \item Gestão de sessões stateless para garantir escalabilidade.
+    \item [Aqui ficará o objetivo relacionado com o Frontend].
+    \item [Aqui ficará o objetivo relacionado com as Estatísticas/Faturas].
+\end{enumerate}
+
+
+\section{Organização do Documento}
+Para descrever melhor os procedimentos, este documento está organizado nas seguintes secções:
+\begin{itemize}
+    \item \textbf{Capítulo 1 -- Introdução} -- apresenta de forma geral o tema e os objetivos do programa.
+    \item \textbf{Capítulo 2 -- Tecnologias e Ferramentas Utilizadas} -- descreve as necessidades do projeto e as ferramentas usadas para o desenvolver.
+    \item \textbf{Capítulo 3 -- Implementação e Testes} -- explica as decisões de arquitetura, segurança e as funcionalidades da loja online.
+    \item \textbf{Capítulo 4 -- Conclusões e Trabalho Futuro} -- resume o trabalho realizado e apresenta possíveis melhorias para o futuro.
+\end{itemize}
+
+
+\chapter{Tecnologias e Ferramentas Utilizadas}
+
+\section{Spring Framework e Spring Security}
+O backend foi desenvolvido com Spring Boot, utilizando o ecossistema Spring Security para gerir a autenticação e autorização. Esta escolha permitiu uma integração simplificada de mecanismos de segurança avançados, como a proteção contra ataques CSRF (mesmo estando desativada para APIs stateless) e a gestão de contextos de segurança por thread.
+
+\section{JSON Web Tokens (JWT)}
+Para a gestão de sessões, optou-se por JWT. Esta tecnologia permite que o servidor não necessite de guardar estado (stateless), o que é ideal para sistemas distribuídos, pois o token enviado pelo cliente contém toda a informação necessária para a sua identificação, permitindo que a API escale horizontalmente sem necessidade de partilhar sessões entre instâncias.
+
+\section{PostgreSQL}
+A persistência de dados é assegurada pelo PostgreSQL, um SGBD relacional robusto que garante a integridade dos dados de utilizadores, produtos e vendas através de transações ACID.
+
+\section{React e Vite}
+O frontend foi construído utilizando React, uma biblioteca JavaScript para a criação de interfaces de utilizador dinâmicas. O ambiente de desenvolvimento Vite foi escolhido pela sua velocidade e suporte nativo a módulos ES.
+\chapter{Implementação}
+
+\section{Arquitetura de Segurança}
+A segurança da aplicação foi desenhada para proteger os dados dos utilizadores e garantir que apenas utilizadores autorizados acedem a recursos sensíveis.
+
+\subsection{Autenticação e Hashing de Passwords}
+O processo de autenticação baseia-se em dois fluxos principais: registo e login. No registo, os dados são validados e a password é cifrada utilizando o algoritmo \textbf{BCrypt} antes de ser persistida na base de dados. O BCrypt adiciona um "salt" aleatório a cada password, protegendo o sistema contra ataques de força bruta e dicionário.
+
+\subsection{Gestão de Sessões com JWT}
+Ao efetuar login com sucesso, o servidor gera um token JWT assinado digitalmente com uma chave secreta configurada em variáveis de ambiente. Este token tem uma validade de 24 horas e deve ser enviado pelo frontend em todos os pedidos subsequentes através do cabeçalho \textit{Authorization}.
+
+\subsection{Middleware de Segurança (Filtros)}
+Implementou-se o \texttt{AuthTokenFilter}, que estende \texttt{OncePerRequestFilter}. Este filtro interseta cada pedido HTTP, valida o token JWT e, caso seja válido, carrega os detalhes do utilizador para o contexto de segurança do Spring, permitindo que o controlador saiba quem é o utilizador ativo.
+
+\begin{lstlisting}[caption={Configuração do SecurityFilterChain no Backend}]
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf(csrf -> csrf.disable())
+        .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth -> 
+            auth.requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/produtos/public/**").permitAll()
+                .anyRequest().authenticated()
+        );
+    return http.build();
+}
+\end{lstlisting}
+
+\section{Integração Frontend-Backend}
+A comunicação entre as duas camadas é feita através de serviços assíncronos no frontend. Criou-se um \texttt{AuthService} em JavaScript que utiliza a API \textit{fetch} para consumir os endpoints REST do backend. O token recebido é armazenado no \texttt{localStorage} para persistência da sessão no browser.
+
+\section{Modelo de Dados}
+[Aqui ficará a descrição do modelo de dados completo].
+
+\section{Gestão de Catálogo e Vendas}
+[Aqui ficará a descrição das funcionalidades de produtos e compras].
+
+\section{Lógica de Negócio e Serviços}
+[Aqui ficará a descrição detalhada da lógica de negócio, incluindo a gestão de produtos, categorias e processamento de encomendas.]
+
+\section{Processamento de Vendas e Stocks}
+[Aqui ficará a descrição do sistema de controlo de stocks e o fluxo de finalização de compra.]
+
+\chapter{Testes e Validação do Sistema}
+[Aqui ficarão os resultados dos testes realizados, capturas de ecrã das funcionalidades a funcionar e validação dos requisitos técnicos.]
+
+\section{Segurança e Autenticação}
+[Aqui ficará a demonstração dos testes de login, registo e proteção de rotas.]
+
+\section{Gestão de Produtos}
+[Aqui ficará a demonstração das operações CRUD de produtos.]
+
+\clearpage
+
+\chapter{Conclusões e Trabalho Futuro}
+
+\section{Conclusão}
+O desenvolvimento deste projeto permitiu consolidar os conhecimentos sobre a criação de aplicações web distribuídas utilizando a framework Spring. A implementação de um sistema de segurança baseado em JWT e a integração com uma base de dados relacional demonstraram a importância da robustez e escalabilidade em sistemas modernos.
+
+\section{Trabalho Futuro}
+Para versões futuras deste sistema, poderiam ser implementadas as seguintes melhorias:
+\begin{itemize}
+    \item \textbf{Sistema de Pagamento:} Integração com gateways de pagamento reais (ex: Stripe ou PayPal).
+    \item \textbf{Notificações:} Implementar um sistema de notificações por email para confirmação de encomendas.
+    \item \textbf{App Móvel:} Desenvolver uma aplicação mobile nativa que consuma a mesma API REST.
+\end{itemize}
+
+
+
+\nocite{*} 
+\bibliographystyle{plain}
+\bibliography{bibliografia}
+
+\end{document}

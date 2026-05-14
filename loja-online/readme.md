@@ -4,6 +4,46 @@ Este diretório contém a API RESTful desenvolvida para a loja online de eletrod
 
 ---
 
+## 🚀 Como Iniciar o Projeto
+
+### Pré-requisitos
+*   **Java 17** ou superior instalado.
+*   **PostgreSQL** a correr localmente (com a base de dados criada).
+*   Ficheiro `.env` configurado na raiz com as credenciais da BD e segredo JWT.
+
+### Backend (Spring Boot)
+1. Navegue até à pasta `loja-online`:
+   ```bash
+   cd loja-online
+   ```
+2. Execute o servidor:
+   - **No Windows (PowerShell/CMD):**
+     ```powershell
+     .\mvnw.cmd spring-boot:run
+     ```
+   - **No WSL/Linux/Mac:**
+     ```bash
+     ./mvnw spring-boot:run
+     ```
+   *O servidor ficará disponível em `http://localhost:8080`.*
+
+### Frontend (React + Vite)
+1. Navegue até à pasta `frontend`:
+   ```powershell
+   cd frontend
+   ```
+2. Instale as dependências (apenas na primeira vez):
+   ```powershell
+   npm install
+   ```
+3. Inicie o modo de desenvolvimento:
+   ```powershell
+   npm run dev
+   ```
+   *A aplicação ficará disponível em `http://localhost:5173`.*
+
+---
+
 ## 🏗 Arquitetura da Base de Dados
 
 A persistência de dados está assegurada por um modelo relacional focado no domínio de Eletrodomésticos:
