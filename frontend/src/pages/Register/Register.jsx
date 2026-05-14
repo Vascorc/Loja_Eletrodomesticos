@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthService from '../../services/auth.service';
 import './Register.css';
 
 const Register = () => {
@@ -9,6 +10,11 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -18,16 +24,29 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
     
     if (formData.password !== formData.confirmPassword) {
-      alert('As passwords não coincidem!');
+      setError('As passwords não coincidem!');
       return;
     }
 
-    console.log('Registo submetido com:', formData);
-    // TODO: Enviar para o backend (onde o perfil será definido como "CLIENTE" por defeito)
+    setLoading(true);
+
+    try {
+      await AuthService.register(formData.nome, formData.email, formData.password);
+      setSuccess('Conta criada com sucesso! A redirecionar para o login...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (err) {
+      setError(err.message || 'Ocorreu um erro ao criar a conta.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleMouseMove = (e) => {
@@ -48,6 +67,8 @@ const Register = () => {
         </div>
 
         <form className="register-form" onSubmit={handleSubmit}>
+          {error && <div className="error-message" style={{color: '#ff4d4d', marginBottom: '1rem', textAlign: 'center'}}>{error}</div>}
+          {success && <div className="success-message" style={{color: '#4dff4d', marginBottom: '1rem', textAlign: 'center'}}>{success}</div>}
           
           <div className="input-group">
             <label htmlFor="nome">Nome Completo</label>
@@ -58,6 +79,7 @@ const Register = () => {
               onChange={handleChange}
               required
               placeholder="Ex: João Silva"
+              disabled={loading}
             />
           </div>
 
@@ -70,6 +92,7 @@ const Register = () => {
               onChange={handleChange}
               required
               placeholder="exemplo@email.com"
+              disabled={loading}
             />
           </div>
 
@@ -83,6 +106,7 @@ const Register = () => {
               required
               placeholder="Mínimo 8 caracteres"
               minLength="8"
+              disabled={loading}
             />
           </div>
 
@@ -96,11 +120,12 @@ const Register = () => {
               required
               placeholder="Repita a palavra-passe"
               minLength="8"
+              disabled={loading}
             />
           </div>
 
-          <button type="submit" className="register-button">
-            Criar Conta
+          <button type="submit" className="register-button" disabled={loading}>
+            {loading ? 'A registar...' : 'Criar Conta'}
           </button>
         </form>
 
