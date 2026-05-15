@@ -1,0 +1,85 @@
+.minhaconta-page {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  font-family: 'Inter', sans-serif;
+}
+
+.minhaconta-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.profile-header {
+  margin-bottom: 40px;
+}
+
+.profile-header h1 {
+  font-size: 2rem;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.profile-header p {
+  color: #4b5563;
+  font-size: 1.1rem;
+}
+
+.account-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.account-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.account-card h3 {
+  font-size: 1.25rem;
+  color: #1f2937;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+.account-card p {
+  color: #4b5563;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.account-card strong {
+  color: #374151;
+}
+
+.admin-card {
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+}
+
+.admin-card h3 {
+  color: #0369a1;
+  border-bottom-color: #bae6fd;
+}
+
+.admin-btn {
+  display: block;
+  width: 100%;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background-color 0.2s;
+}
+
+.admin-btn:hover {
+  background-color: #1d4ed8;
+}
