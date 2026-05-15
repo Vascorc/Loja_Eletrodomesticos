@@ -198,3 +198,5 @@
 .logout-link:hover {
   opacity: 1;
 }
+
+.btn-loja { background: linear-gradient(135deg, #6e8efb, #a777e3); color: white; padding: 1rem 2rem; border-radius: 30px; border: none; font-size: 1.2rem; cursor: pointer; transition: transform 0.3s ease; } .btn-loja:hover { transform: scale(1.05); } .admin-dashboard { margin-top: 3rem; background: rgba(0,0,0,0.2); padding: 2rem; border-radius: 12px; } .stats-cards { display: flex; gap: 2rem; margin-top: 1rem; margin-bottom: 3rem; } .stat-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; flex: 1; text-align: center; } .stat-value { font-size: 2.5rem; color: #4CAF50; font-weight: bold; margin-top: 1rem; }
