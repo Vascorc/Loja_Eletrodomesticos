@@ -1,0 +1,109 @@
+.fatura-container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    animation: fadeIn 0.5s ease;
+}
+
+.fatura-card {
+    background: white;
+    color: #333;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.fatura-header {
+    text-align: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.fatura-header h2 {
+    margin: 0;
+    color: #222;
+}
+
+.fatura-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.fatura-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+}
+
+.fatura-table th, .fatura-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.fatura-table th {
+    background-color: #f9f9f9;
+    color: #555;
+}
+
+.fatura-total {
+    text-align: right;
+    border-top: 2px solid #eee;
+    padding-top: 1rem;
+    color: #222;
+}
+
+.fatura-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+}
+
+.btn-print {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-print:hover {
+    background: #1976D2;
+}
+
+.btn-back {
+    background: transparent;
+    color: #555;
+    border: 1px solid #555;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-back:hover {
+    background: #eee;
+}
+
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .fatura-card, .fatura-card * {
+        visibility: visible;
+    }
+    .fatura-card {
+        position: absolute;
+        left: 0;
+        top: 0;
+        box-shadow: none;
+        width: 100%;
+    }
+    .fatura-actions {
+        display: none;
+    }
+}
