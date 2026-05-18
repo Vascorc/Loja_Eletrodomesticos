@@ -11,7 +11,7 @@ const Carrinho = () => {
         return (
             <div className="carrinho-vazio">
                 <h2>O seu carrinho está vazio</h2>
-                <button onClick={() => navigate('/produtos')} className="btn-primary">Ver Produtos</button>
+                <button onClick={() => navigate('/catalogo')} className="btn-primary">Ver Produtos</button>
             </div>
         );
     }

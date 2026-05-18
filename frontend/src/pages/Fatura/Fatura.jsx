@@ -13,7 +13,7 @@ const Fatura = () => {
 
     useEffect(() => {
         if (!faturaId) {
-            navigate('/produtos');
+            navigate('/catalogo');
             return;
         }
 
