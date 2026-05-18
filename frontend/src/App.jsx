@@ -46,6 +46,38 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/produtos"
+            element={
+              <ProtectedRoute>
+                <Produtos />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/carrinho"
+            element={
+              <ProtectedRoute>
+                <Carrinho />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/fatura"
+            element={
+              <ProtectedRoute>
+                <Fatura />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Rota Protegida apenas para ADMIN */}
           <Route

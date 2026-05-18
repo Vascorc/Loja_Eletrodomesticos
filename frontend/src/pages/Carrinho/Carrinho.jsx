@@ -27,11 +27,11 @@ const Carrinho = () => {
                             <p className="preco">{item.preco.toFixed(2)} €</p>
                         </div>
                         <div className="item-actions">
-                            <input 
-                                type="number" 
-                                min="1" 
+                            <input
+                                type="number"
+                                min="1"
                                 max={item.stock}
-                                value={item.quantidade} 
+                                value={item.quantidade}
                                 onChange={(e) => updateQuantity(item.produtoId, parseInt(e.target.value))}
                                 className="qtd-input"
                             />
