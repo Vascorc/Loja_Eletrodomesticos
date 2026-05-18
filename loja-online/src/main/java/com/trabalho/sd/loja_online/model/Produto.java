@@ -30,6 +30,9 @@ public class Produto implements Serializable {
     @Column(name = "eficiencia_energetica")
     private String eficienciaEnergetica;
 
+    @Column(name = "imagem_url")
+    private String imagemUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;

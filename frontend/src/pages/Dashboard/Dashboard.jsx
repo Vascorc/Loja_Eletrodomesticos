@@ -1,15 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthService from '../../services/auth.service';
+import { produtoService } from '../../services/produtoService';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
+  const [produtos, setProdutos] = useState([]);
+  const [recentes, setRecentes] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const currentUser = AuthService.getCurrentUser();
     setUser(currentUser);
+
+    const vistos = JSON.parse(localStorage.getItem('vistosRecentemente') || '[]');
+    setRecentes(vistos);
+
+    const carregarProdutos = async () => {
+      try {
+        const dados = await produtoService.listarTodos();
+        setProdutos(dados);
+      } catch (error) {
+        console.error("Erro ao carregar produtos:", error);
+      }
+    };
+    carregarProdutos();
   }, []);
 
   const handleLogout = () => {
@@ -18,12 +34,19 @@ const Dashboard = () => {
     window.location.reload();
   };
 
-  const featuredProducts = [
-    { id: 1, name: "Frigorífico Combinado Samsung No Frost", price: "749.99", category: "Frio" },
-    { id: 2, name: "Máquina de Lavar Roupa LG 9kg AI DD", price: "499.90", category: "Lavagem" },
-    { id: 3, name: "Televisão OLED Sony Bravia 55\" 4K", price: "1299.00", category: "TV" },
-    { id: 4, name: "Portátil HP Victus 16-d1000", price: "899.99", category: "Informática" },
-  ];
+  const registarVisualizacao = (product) => {
+    let vistos = JSON.parse(localStorage.getItem('vistosRecentemente') || '[]');
+    // Remove se já existir para recolocar no início
+    vistos = vistos.filter(p => p.id !== product.id);
+    vistos.unshift(product);
+    // Limitar a 4 produtos no histórico
+    if (vistos.length > 4) vistos = vistos.slice(0, 4);
+    
+    localStorage.setItem('vistosRecentemente', JSON.stringify(vistos));
+    setRecentes(vistos);
+    
+    alert(`Estás a ver detalhes de: ${product.nome}\n(Este produto foi guardado no histórico "Continuar a Ver" via localStorage)`);
+  };
 
   if (!user) return <div className="loading">A carregar...</div>;
 
@@ -76,30 +99,56 @@ const Dashboard = () => {
         </div>
 
         <div className="products-grid">
-          {featuredProducts.map(product => (
-            <div key={product.id} className="product-card">
-              <div className="product-image-placeholder">
-                [IMAGEM]
+          {produtos.length > 0 ? (
+            produtos.map(product => (
+              <div key={product.id} className="product-card" onClick={() => registarVisualizacao(product)} style={{cursor: 'pointer'}}>
+                <div className="product-image-placeholder" style={{padding: product.imagemUrl ? '0' : '40px 0', height: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  {product.imagemUrl ? (
+                    <img src={product.imagemUrl} alt={product.nome} style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px 8px 0 0'}} />
+                  ) : (
+                    '[IMAGEM]'
+                  )}
+                </div>
+                <div className="product-info">
+                  <h3>{product.nome}</h3>
+                  <div className="product-price">{product.preco}€</div>
+                  <button className="add-to-cart" onClick={(e) => { e.stopPropagation(); alert('Adicionado ao carrinho!'); }}>
+                    Adicionar ao Carrinho
+                  </button>
+                </div>
               </div>
-              <div className="product-info">
-                <h3>{product.name}</h3>
-                <div className="product-price">{product.price}€</div>
-                <button className="add-to-cart">Adicionar ao Carrinho</button>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>Nenhum produto disponível no catálogo no momento.</p>
+          )}
         </div>
 
         <div className="section-title">
           <h2>Continuar a Ver</h2>
         </div>
         <div className="products-grid">
-          {/* Placeholder para mais produtos */}
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="product-card" style={{opacity: 0.7}}>
-              <div className="product-image-placeholder">Em breve</div>
-            </div>
-          ))}
+          {recentes.length > 0 ? (
+            recentes.map(product => (
+              <div key={`recent-${product.id}`} className="product-card" onClick={() => registarVisualizacao(product)} style={{cursor: 'pointer'}}>
+                <div className="product-image-placeholder" style={{padding: product.imagemUrl ? '0' : '40px 0', height: '180px', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  {product.imagemUrl ? (
+                    <img src={product.imagemUrl} alt={product.nome} style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px 8px 0 0'}} />
+                  ) : (
+                    '[IMAGEM]'
+                  )}
+                </div>
+                <div className="product-info">
+                  <h3>{product.nome}</h3>
+                  <div className="product-price">{product.preco}€</div>
+                  <button className="add-to-cart" onClick={(e) => { e.stopPropagation(); alert('Adicionado ao carrinho!'); }}>
+                    Adicionar ao Carrinho
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p style={{color: '#64748b'}}>Ainda não viste nenhum produto. Clica em algum produto do catálogo para ele aparecer aqui!</p>
+          )}
         </div>
       </main>
     </div>
