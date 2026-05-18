@@ -1,3 +1,4 @@
+
 # Trabalho Prático 2 - Sistemas Distribuídos
 **Tema (T1): Loja de Eletrodomésticos**
 
