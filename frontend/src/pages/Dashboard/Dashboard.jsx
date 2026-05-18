@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthService from '../../services/auth.service';
 import { produtoService } from '../../services/produtoService';
+import { useCart } from '../../context/CartContext';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [produtos, setProdutos] = useState([]);
   const [recentes, setRecentes] = useState([]);
+  const { cart, addToCart, cartTotal } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,9 +72,9 @@ const Dashboard = () => {
               <span>Encomendas</span>
               <span>& Devoluções</span>
             </div>
-            <div className="nav-item">
+            <div onClick={() => navigate('/carrinho')} className="nav-item">
               <span>🛒 Carrinho</span>
-              <span>0 itens</span>
+              <span>{cart.length} itens ({cartTotal.toFixed(2)} €)</span>
             </div>
             <span onClick={handleLogout} className="logout-link">Sair</span>
           </div>
@@ -112,7 +114,7 @@ const Dashboard = () => {
                 <div className="product-info">
                   <h3>{product.nome}</h3>
                   <div className="product-price">{product.preco}€</div>
-                  <button className="add-to-cart" onClick={(e) => { e.stopPropagation(); alert('Adicionado ao carrinho!'); }}>
+                  <button className="add-to-cart" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>
                     Adicionar ao Carrinho
                   </button>
                 </div>
@@ -140,7 +142,7 @@ const Dashboard = () => {
                 <div className="product-info">
                   <h3>{product.nome}</h3>
                   <div className="product-price">{product.preco}€</div>
-                  <button className="add-to-cart" onClick={(e) => { e.stopPropagation(); alert('Adicionado ao carrinho!'); }}>
+                  <button className="add-to-cart" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>
                     Adicionar ao Carrinho
                   </button>
                 </div>

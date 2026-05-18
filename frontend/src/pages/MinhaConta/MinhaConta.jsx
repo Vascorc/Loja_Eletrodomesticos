@@ -101,7 +101,6 @@ const MinhaConta = () => {
             <div className="account-card admin-card">
               <h3>Administração</h3>
               <p>Tens permissões de gestão.</p>
-              <button className="admin-btn" onClick={() => navigate('/admin/produtos')}>Adicionar Produtos</button>
               <button className="admin-btn" onClick={() => navigate('/admin/produtos')}>Gerir Produtos</button>
             </div>
           )}

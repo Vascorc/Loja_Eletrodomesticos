@@ -22,10 +22,10 @@ export const CartProvider = ({ children }) => {
                         : item
                 );
             }
-            return [...prevCart, { 
-                produtoId: product.id, 
-                nome: product.nome, 
-                preco: product.preco, 
+            return [...prevCart, {
+                produtoId: product.id,
+                nome: product.nome,
+                preco: product.preco,
                 quantidade: 1,
                 stock: product.stock
             }];
