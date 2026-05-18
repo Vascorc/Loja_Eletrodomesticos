@@ -5,6 +5,10 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import CatalogoPage from './pages/Catalogo/CatalogoPage';
 import AdminProdutos from './pages/AdminProdutos/AdminProdutos';
 import MinhaConta from './pages/MinhaConta/MinhaConta';
+import Produtos from './pages/Produtos/Produtos';
+import Carrinho from './pages/Carrinho/Carrinho';
+import Checkout from './pages/Checkout/Checkout';
+import Fatura from './pages/Fatura/Fatura';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
