@@ -30,7 +30,7 @@ const Produtos = () => {
                             <h3>{produto.nome}</h3>
                             <p className="categoria">{produto.categoriaNome}</p>
                             <p className="preco">{produto.preco.toFixed(2)} €</p>
-                            <p className="stock">Stock: {produto.stock}</p>
+                            <p className={`stock ${produto.stock === 0 ? 'stock-esgotado' : produto.stock <= 5 ? 'stock-baixo' : 'stock-disponivel'}`}>{produto.stock === 0 ? 'Esgotado' : produto.stock <= 5 ? 'Poucas unidades' : 'Em stock'}</p>
                         </div>
                         <button 
                             className="btn-add-cart" 

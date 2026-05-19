@@ -48,9 +48,13 @@
 
 .stock {
     font-size: 0.9rem;
-    color: #ddd;
+    font-weight: 600;
     margin-bottom: 1.5rem;
 }
+
+.stock.stock-disponivel { color: #16A34A; }
+.stock.stock-baixo      { color: #D97706; }
+.stock.stock-esgotado   { color: #DC2626; }
 
 .btn-add-cart {
     background: linear-gradient(135deg, #6e8efb, #a777e3);

@@ -30,6 +30,12 @@ export const produtoService = {
     return res.json();
   },
 
+  maisVendidos: async () => {
+    const res = await fetch(`${BASE_URL}/produtos/mais-vendidos`, { headers: authHeader() });
+    if (!res.ok) throw new Error('Erro ao carregar produtos em destaque');
+    return res.json();
+  },
+
   listarPorCategoria: async (categoriaId) => {
     const res = await fetch(`${BASE_URL}/produtos/categoria/${categoriaId}`, { headers: authHeader() });
     if (!res.ok) throw new Error('Erro ao carregar produtos da categoria');

@@ -35,6 +35,12 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorId(id));
     }
 
+    // GET /api/produtos/mais-vendidos
+    @GetMapping("/mais-vendidos")
+    public ResponseEntity<List<ProdutoDTO>> maisVendidos() {
+        return ResponseEntity.ok(produtoService.listarMaisVendidos());
+    }
+
     // GET /api/produtos/categoria/{categoriaId}
     @GetMapping("/categoria/{categoriaId}")
     public ResponseEntity<List<ProdutoDTO>> listarPorCategoria(@PathVariable Long categoriaId) {

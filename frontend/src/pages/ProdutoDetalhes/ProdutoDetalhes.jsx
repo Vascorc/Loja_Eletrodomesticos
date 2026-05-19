@@ -1,25 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import AuthService from '../../services/auth.service';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { produtoService } from '../../services/produtoService';
 import { useCart } from '../../context/CartContext';
+import Navbar from '../../components/Navbar/Navbar';
 import './ProdutoDetalhes.css';
-import '../Dashboard/Dashboard.css';
 
 const ProdutoDetalhes = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { cart, addToCart, cartTotal, setIsCartOpen } = useCart();
+  const { addToCart } = useCart();
 
-  const [user, setUser] = useState(null);
   const [produto, setProduto] = useState(null);
   const [produtosRelacionados, setProdutosRelacionados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setUser(AuthService.getCurrentUser());
-
     const carregarDetalhes = async () => {
       setLoading(true);
       setError(null);
@@ -44,60 +40,12 @@ const ProdutoDetalhes = () => {
     carregarDetalhes();
   }, [id]);
 
-  const handleLogout = () => {
-    AuthService.logout();
-    navigate('/login');
-    window.location.reload();
-  };
-
-  const handleNavSearch = (e) => {
-    e.preventDefault();
-    if (navSearchTerm.trim()) {
-      navigate(`/catalogo?q=${encodeURIComponent(navSearchTerm)}`);
-    }
-  };
-
   if (loading) return <div className="loading" style={{textAlign: 'center', padding: '3rem'}}>A carregar detalhes...</div>;
   if (error || !produto) return <div className="error-message" style={{color: 'red', textAlign: 'center', padding: '3rem'}}>{error || "Produto não encontrado."}</div>;
 
   return (
     <>
-      {user && (
-        <nav className="dashboard-nav">
-          <div className="nav-top">
-            <div className="nav-logo" onClick={() => navigate('/dashboard')} style={{cursor: 'pointer'}}>ELECTRO-SD</div>
-            
-            <div className="nav-search">
-              <input type="text" placeholder="Pesquisar eletrodomésticos, tecnologia..." />
-              <button className="search-btn">🔍</button>
-            </div>
-
-            <div className="nav-actions">
-              <Link to="/minha-conta" className="nav-item" style={{ textDecoration: 'none', color: 'inherit' }}>
-                <span>Olá, {user.email.split('@')[0]}</span>
-                <span>Minha Conta</span>
-              </Link>
-              <div className="nav-item">
-                <span>Encomendas</span>
-                <span>& Devoluções</span>
-              </div>
-              <div onClick={() => setIsCartOpen(true)} className="nav-item" style={{cursor: 'pointer'}}>
-                <span>🛒 Carrinho</span>
-                <span>{cart.length} itens ({cartTotal.toFixed(2)} €)</span>
-              </div>
-              <span onClick={handleLogout} className="logout-link">Sair</span>
-            </div>
-          </div>
-
-          <div className="nav-bottom">
-            <span>Todas as Categorias</span>
-            <span>Grandes Eletrodomésticos</span>
-            <span>Televisores</span>
-            <span>Informática</span>
-            <span>Promoções do Dia</span>
-          </div>
-        </nav>
-      )}
+      <Navbar />
 
       <div className="produto-detalhes-page">
         <div className="back-button-container">
@@ -126,7 +74,7 @@ const ProdutoDetalhes = () => {
           <div className="produto-especificacoes">
             <h3>Especificações</h3>
             <ul>
-              <li><strong>Stock Disponível:</strong> {produto.stock} unidades</li>
+              <li><strong>Disponibilidade:</strong> <span className={produto.stock === 0 ? 'stock-esgotado' : produto.stock <= 5 ? 'stock-baixo' : 'stock-disponivel'}>{produto.stock === 0 ? 'Esgotado' : produto.stock <= 5 ? 'Poucas unidades' : 'Em stock'}</span></li>
               {produto.eficienciaEnergetica && (
                 <li>
                   <strong>Eficiência Energética:</strong> 
