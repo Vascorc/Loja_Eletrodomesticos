@@ -19,7 +19,7 @@ const Fatura = () => {
 
         fetch(`http://localhost:8080/api/vendas/${faturaId}/fatura`, {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user'))?.token}`
             }
         })
             .then(res => {
