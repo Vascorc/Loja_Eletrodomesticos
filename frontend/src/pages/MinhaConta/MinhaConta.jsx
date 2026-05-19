@@ -15,7 +15,7 @@ const MinhaConta = () => {
     if (currentUser) {
       fetch('http://localhost:8080/api/vendas/historico', {
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
+            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user'))?.token}`
         }
       })
       .then(res => res.ok ? res.json() : [])
