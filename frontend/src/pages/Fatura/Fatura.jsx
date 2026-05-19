@@ -22,18 +22,18 @@ const Fatura = () => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         })
-        .then(res => {
-            if (!res.ok) throw new Error('Falha ao obter fatura');
-            return res.json();
-        })
-        .then(data => {
-            setFatura(data);
-            setLoading(false);
-        })
-        .catch(err => {
-            setError(err.message);
-            setLoading(false);
-        });
+            .then(res => {
+                if (!res.ok) throw new Error('Falha ao obter fatura');
+                return res.json();
+            })
+            .then(data => {
+                setFatura(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                setError(err.message);
+                setLoading(false);
+            });
     }, [faturaId, navigate]);
 
     if (loading) return <div className="fatura-container">A carregar fatura...</div>;
@@ -47,7 +47,7 @@ const Fatura = () => {
                     <h2>Fatura / Recibo</h2>
                     <p>Loja de Eletrodomésticos</p>
                 </div>
-                
+
                 <div className="fatura-info">
                     <p><strong>Nº da Venda:</strong> #{fatura.id}</p>
                     <p><strong>Data:</strong> {new Date(fatura.dataVenda).toLocaleString()}</p>

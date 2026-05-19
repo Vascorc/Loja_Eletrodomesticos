@@ -7,9 +7,12 @@ const Produtos = () => {
     const { addToCart } = useCart();
 
     useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const token = user ? user.token : null;
+
         fetch('http://localhost:8080/api/produtos', {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${token}`
             }
         })
         .then(res => res.json())

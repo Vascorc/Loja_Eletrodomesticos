@@ -9,7 +9,7 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [produtos, setProdutos] = useState([]);
   const [recentes, setRecentes] = useState([]);
-  const { cart, addToCart, cartTotal } = useCart();
+  const { cart, addToCart, cartTotal, setIsCartOpen } = useCart();
   const navigate = useNavigate();
   const [navSearchTerm, setNavSearchTerm] = useState('');
   const [sugestoes, setSugestoes] = useState([]);

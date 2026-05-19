@@ -17,6 +17,7 @@ function App() {
   return (
     <Router>
       <div className="app-container">
+        <Carrinho />
         <Routes>
           {/* Rotas Públicas */}
           <Route path="/login" element={<Login />} />
@@ -55,14 +56,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/carrinho"
-            element={
-              <ProtectedRoute>
-                <Carrinho />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="/checkout"
             element={
