@@ -19,7 +19,7 @@ const CartTimer = ({ expiresAt }) => {
     const seconds = Math.floor((timeLeft % 60000) / 1000);
     return (
         <span className={`timer ${minutes < 1 ? 'warning' : ''}`}>
-            Reservado por: {minutes}:{seconds.toString().padStart(2, '0')}
+            {minutes}:{seconds.toString().padStart(2, '0')}
         </span>
     );
 };
@@ -56,35 +56,39 @@ const Carrinho = () => {
                     <button className="btn-close" onClick={() => setIsCartOpen(false)}>&times;</button>
                 </div>
                 <div className="carrinho-items">
-                {cart.map(item => (
-                    <div className="carrinho-item" key={item.produtoId}>
-                        <div className="item-info">
-                            <h3>{item.nome}</h3>
-                            <p className="preco">{item.preco.toFixed(2)} €</p>
-                            {item.expiresAt && <CartTimer expiresAt={item.expiresAt} />}
+                    {cart.map(item => (
+                        <div className="carrinho-item" key={item.produtoId}>
+                            <div className="item-info">
+                                <h3>{item.nome}</h3>
+                                <p className="preco">{item.preco.toFixed(2)} €</p>
+                            </div>
+                            <div className="item-actions">
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max={item.stock}
+                                    value={item.quantidade}
+                                    onChange={(e) => updateQuantity(item.produtoId, parseInt(e.target.value))}
+                                    className="qtd-input"
+                                />
+                                <button onClick={() => removeFromCart(item.produtoId)} className="btn-remove">Remover</button>
+                            </div>
                         </div>
-                        <div className="item-actions">
-                            <input
-                                type="number"
-                                min="1"
-                                max={item.stock}
-                                value={item.quantidade}
-                                onChange={(e) => updateQuantity(item.produtoId, parseInt(e.target.value))}
-                                className="qtd-input"
-                            />
-                            <button onClick={() => removeFromCart(item.produtoId)} className="btn-remove">Remover</button>
+                    ))}
+                </div>
+                <div className="carrinho-resumo">
+                    {cart.length > 0 && cart[0].expiresAt && (
+                        <div style={{ marginBottom: '10px', fontSize: '0.95rem', color: '#475569', fontWeight: 'bold' }}>
+                            Tempo para concluir compra: <CartTimer expiresAt={cart[0].expiresAt} />
                         </div>
+                    )}
+                    <h3>Total: {cartTotal.toFixed(2)} €</h3>
+                    <div className="resumo-actions">
+                        <button onClick={clearCart} className="btn-limpar">Limpar Carrinho</button>
+                        <button onClick={() => { setIsCartOpen(false); navigate('/checkout'); }} className="btn-checkout">Avançar para Checkout</button>
                     </div>
-                ))}
-            </div>
-            <div className="carrinho-resumo">
-                <h3>Total: {cartTotal.toFixed(2)} €</h3>
-                <div className="resumo-actions">
-                    <button onClick={clearCart} className="btn-limpar">Limpar Carrinho</button>
-                    <button onClick={() => { setIsCartOpen(false); navigate('/checkout'); }} className="btn-checkout">Avançar para Checkout</button>
                 </div>
             </div>
-        </div>
         </>
     );
 };

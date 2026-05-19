@@ -68,17 +68,22 @@ export const CartProvider = ({ children }) => {
                     return prevCart.map(item =>
                         item.produtoId === product.id
                             ? { ...item, quantidade: item.quantidade + 1, expiresAt }
-                            : item
+                            : { ...item, expiresAt } // Atualiza o tempo para todos os outros itens
                     );
                 }
-                return [...prevCart, {
-                    produtoId: product.id,
-                    nome: product.nome,
-                    preco: product.preco,
-                    quantidade: 1,
-                    stock: product.stock,
-                    expiresAt
-                }];
+                
+                // Se é novo, atualiza o tempo de todos os itens já existentes e junta o novo
+                return [
+                    ...prevCart.map(item => ({ ...item, expiresAt })), 
+                    {
+                        produtoId: product.id,
+                        nome: product.nome,
+                        preco: product.preco,
+                        quantidade: 1,
+                        stock: product.stock,
+                        expiresAt
+                    }
+                ];
             });
         } catch (error) {
             alert(error.message);

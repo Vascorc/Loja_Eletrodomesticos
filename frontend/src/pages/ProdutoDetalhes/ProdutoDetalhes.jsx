@@ -9,7 +9,7 @@ import '../Dashboard/Dashboard.css';
 const ProdutoDetalhes = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { cart, addToCart, cartTotal } = useCart();
+  const { cart, addToCart, cartTotal, setIsCartOpen } = useCart();
 
   const [user, setUser] = useState(null);
   const [produto, setProduto] = useState(null);
@@ -81,7 +81,7 @@ const ProdutoDetalhes = () => {
                 <span>Encomendas</span>
                 <span>& Devoluções</span>
               </div>
-              <div onClick={() => navigate('/carrinho')} className="nav-item" style={{cursor: 'pointer'}}>
+              <div onClick={() => setIsCartOpen(true)} className="nav-item" style={{cursor: 'pointer'}}>
                 <span>🛒 Carrinho</span>
                 <span>{cart.length} itens ({cartTotal.toFixed(2)} €)</span>
               </div>

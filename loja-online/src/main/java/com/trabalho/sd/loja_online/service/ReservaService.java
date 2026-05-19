@@ -41,6 +41,17 @@ public class ReservaService {
         produto.setStock(produto.getStock() - quantidade);
         produtoRepository.save(produto);
 
+        LocalDateTime novaExpiracao = LocalDateTime.now().plusMinutes(5);
+
+        // Renovar o tempo de todas as reservas já existentes do utilizador
+        var reservasDoUtilizador = reservaRepository.findByUtilizadorId(utilizador.getId());
+        for (Reserva r : reservasDoUtilizador) {
+            r.setDataExpiracao(novaExpiracao);
+        }
+        if (!reservasDoUtilizador.isEmpty()) {
+            reservaRepository.saveAll(reservasDoUtilizador);
+        }
+
         // Verificar se já existe reserva para este produto/utilizador e atualizar, ou criar nova
         Optional<Reserva> reservaExistente = reservaRepository.findByUtilizadorIdAndProdutoId(utilizador.getId(), produtoId);
         Reserva reserva;
@@ -48,9 +59,9 @@ public class ReservaService {
         if (reservaExistente.isPresent()) {
             reserva = reservaExistente.get();
             reserva.setQuantidade(reserva.getQuantidade() + quantidade);
-            reserva.setDataExpiracao(LocalDateTime.now().plusMinutes(5));
+            reserva.setDataExpiracao(novaExpiracao);
         } else {
-            reserva = new Reserva(produto, utilizador, quantidade, LocalDateTime.now().plusMinutes(5));
+            reserva = new Reserva(produto, utilizador, quantidade, novaExpiracao);
         }
 
         return reservaRepository.save(reserva);

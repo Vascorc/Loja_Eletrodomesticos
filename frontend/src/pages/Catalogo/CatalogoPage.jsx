@@ -24,7 +24,7 @@ const CatalogoPage = () => {
   const [erro, setErro] = useState('');
   const [addedId, setAddedId] = useState(null);
   const [user, setUser] = useState(null);
-  const { cart, cartTotal, addToCart } = useCart();
+  const { cart, cartTotal, addToCart, setIsCartOpen } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -94,7 +94,7 @@ const CatalogoPage = () => {
                 <span>Encomendas</span>
                 <span>& Devoluções</span>
               </div>
-              <div onClick={() => navigate('/carrinho')} className="nav-item" style={{cursor: 'pointer'}}>
+              <div onClick={() => setIsCartOpen(true)} className="nav-item" style={{cursor: 'pointer'}}>
                 <span>🛒 Carrinho</span>
                 <span>{cart.length} itens ({cartTotal.toFixed(2)} €)</span>
               </div>
