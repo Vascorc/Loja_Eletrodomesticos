@@ -4,6 +4,7 @@ import com.trabalho.sd.loja_online.dto.ProdutoDTO;
 import com.trabalho.sd.loja_online.model.Categoria;
 import com.trabalho.sd.loja_online.model.Produto;
 import com.trabalho.sd.loja_online.repository.CategoriaRepository;
+import com.trabalho.sd.loja_online.repository.ItemVendaRepository;
 import com.trabalho.sd.loja_online.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
     private final CategoriaRepository categoriaRepository;
+    private final ItemVendaRepository itemVendaRepository;
 
     // ── Listar todos ──────────────────────────────────────────────────────────
 
@@ -52,6 +54,22 @@ public class ProdutoService {
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    // ── Top 5 mais vendidos ───────────────────────────────────────────────────
+
+    public List<ProdutoDTO> listarMaisVendidos() {
+        List<Produto> maisVendidos = itemVendaRepository.findTopProdutosMaisVendidos(5);
+        if (maisVendidos.size() < 5) {
+            List<Produto> todos = produtoRepository.findAll();
+            for (Produto p : todos) {
+                if (maisVendidos.stream().noneMatch(mv -> mv.getId().equals(p.getId()))) {
+                    maisVendidos.add(p);
+                }
+                if (maisVendidos.size() == 5) break;
+            }
+        }
+        return maisVendidos.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     // ── Criar produto ─────────────────────────────────────────────────────────

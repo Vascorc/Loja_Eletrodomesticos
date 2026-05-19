@@ -1,3 +1,18 @@
+.stock-disponivel {
+  color: #16A34A;
+  font-weight: 600;
+}
+
+.stock-baixo {
+  color: #D97706;
+  font-weight: 600;
+}
+
+.stock-esgotado {
+  color: #DC2626;
+  font-weight: 600;
+}
+
 .produto-detalhes-page {
   padding: 2rem;
   max-width: 1200px;
