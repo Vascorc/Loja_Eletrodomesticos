@@ -19,19 +19,19 @@ export const produtoService = {
   },
 
   pesquisar: async (nome) => {
-    const res = await fetch(`${BASE_URL}/produtos?nome=${encodeURIComponent(nome)}`);
+    const res = await fetch(`${BASE_URL}/produtos?nome=${encodeURIComponent(nome)}`, { headers: authHeader() });
     if (!res.ok) throw new Error('Erro na pesquisa');
     return res.json();
   },
 
   buscarPorId: async (id) => {
-    const res = await fetch(`${BASE_URL}/produtos/${id}`);
+    const res = await fetch(`${BASE_URL}/produtos/${id}`, { headers: authHeader() });
     if (!res.ok) throw new Error('Produto não encontrado');
     return res.json();
   },
 
   listarPorCategoria: async (categoriaId) => {
-    const res = await fetch(`${BASE_URL}/produtos/categoria/${categoriaId}`);
+    const res = await fetch(`${BASE_URL}/produtos/categoria/${categoriaId}`, { headers: authHeader() });
     if (!res.ok) throw new Error('Erro ao carregar produtos da categoria');
     return res.json();
   },

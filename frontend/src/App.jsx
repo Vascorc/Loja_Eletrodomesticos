@@ -9,6 +9,7 @@ import Produtos from './pages/Produtos/Produtos';
 import Carrinho from './pages/Carrinho/Carrinho';
 import Checkout from './pages/Checkout/Checkout';
 import Fatura from './pages/Fatura/Fatura';
+import ProdutoDetalhes from './pages/ProdutoDetalhes/ProdutoDetalhes';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -75,6 +76,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Fatura />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/produto/:id"
+            element={
+              <ProtectedRoute>
+                <ProdutoDetalhes />
               </ProtectedRoute>
             }
           />

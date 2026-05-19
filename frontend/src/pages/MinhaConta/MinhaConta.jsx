@@ -41,7 +41,7 @@ const MinhaConta = () => {
           <Link to="/" className="nav-logo" style={{ textDecoration: 'none', color: 'inherit' }}>ELECTRO-SD</Link>
           
           <div className="nav-actions">
-            <Link to="/produtos" className="nav-item" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to="/catalogo" className="nav-item" style={{ textDecoration: 'none', color: 'inherit' }}>
               <span>⬅ Voltar</span>
               <span>à Loja</span>
             </Link>
