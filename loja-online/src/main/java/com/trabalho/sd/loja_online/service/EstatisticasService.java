@@ -1,7 +1,9 @@
 package com.trabalho.sd.loja_online.service;
 
 import com.trabalho.sd.loja_online.dto.EstatisticasDTO;
+import com.trabalho.sd.loja_online.dto.ProdutoVendasDTO;
 import com.trabalho.sd.loja_online.dto.TopClienteDTO;
+import com.trabalho.sd.loja_online.repository.ItemVendaRepository;
 import com.trabalho.sd.loja_online.repository.VendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class EstatisticasService {
 
     @Autowired
     private VendaRepository vendaRepository;
+
+    @Autowired
+    private ItemVendaRepository itemVendaRepository;
 
     public EstatisticasDTO getEstatisticas() {
         EstatisticasDTO dto = new EstatisticasDTO();
@@ -49,6 +54,20 @@ public class EstatisticasService {
             count++;
         }
         dto.setMelhoresClientes(topClientes);
+
+        // Mais vendidos
+        List<ProdutoVendasDTO> maisVendidos = new ArrayList<>();
+        for (Object[] row : itemVendaRepository.findMaisVendidosComQuantidade(5)) {
+            maisVendidos.add(new ProdutoVendasDTO((String) row[0], ((Number) row[1]).longValue()));
+        }
+        dto.setMaisVendidos(maisVendidos);
+
+        // Menos vendidos
+        List<ProdutoVendasDTO> menosVendidos = new ArrayList<>();
+        for (Object[] row : itemVendaRepository.findMenosVendidosComQuantidade(5)) {
+            menosVendidos.add(new ProdutoVendasDTO((String) row[0], ((Number) row[1]).longValue()));
+        }
+        dto.setMenosVendidos(menosVendidos);
 
         return dto;
     }

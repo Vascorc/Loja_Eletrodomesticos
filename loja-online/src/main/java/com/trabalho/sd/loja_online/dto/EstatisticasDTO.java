@@ -9,4 +9,6 @@ public class EstatisticasDTO {
     private Double faturadoSemana;
     private Double faturadoMes;
     private List<TopClienteDTO> melhoresClientes;
+    private List<ProdutoVendasDTO> maisVendidos;
+    private List<ProdutoVendasDTO> menosVendidos;
 }

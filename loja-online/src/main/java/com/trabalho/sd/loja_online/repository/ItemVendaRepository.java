@@ -15,4 +15,10 @@ public interface ItemVendaRepository extends JpaRepository<ItemVenda, Long> {
 
     @Query("SELECT iv.produto FROM ItemVenda iv GROUP BY iv.produto ORDER BY SUM(iv.quantidade) DESC LIMIT :limit")
     List<Produto> findTopProdutosMaisVendidos(@Param("limit") int limit);
+
+    @Query("SELECT iv.produto.nome, SUM(iv.quantidade) FROM ItemVenda iv GROUP BY iv.produto ORDER BY SUM(iv.quantidade) DESC LIMIT :limit")
+    List<Object[]> findMaisVendidosComQuantidade(@Param("limit") int limit);
+
+    @Query("SELECT iv.produto.nome, SUM(iv.quantidade) FROM ItemVenda iv GROUP BY iv.produto ORDER BY SUM(iv.quantidade) ASC LIMIT :limit")
+    List<Object[]> findMenosVendidosComQuantidade(@Param("limit") int limit);
 }

@@ -4,6 +4,7 @@ import com.trabalho.sd.loja_online.dto.CheckoutRequestDTO;
 import com.trabalho.sd.loja_online.dto.VendaDTO;
 import com.trabalho.sd.loja_online.service.VendaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +26,12 @@ public class VendaController {
     @GetMapping("/historico")
     public List<VendaDTO> getHistorico(Authentication authentication) {
         return vendaService.getHistorico(authentication.getName());
+    }
+
+    @GetMapping("/historico/todos")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<VendaDTO> getHistoricoTodos() {
+        return vendaService.getHistoricoTodos();
     }
 
     @GetMapping("/{id}/fatura")
