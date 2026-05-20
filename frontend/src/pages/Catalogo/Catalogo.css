@@ -294,3 +294,50 @@
 .btn-carrinho.added {
   background-color: #059669;
 }
+
+@media (max-width: 1024px) {
+  .catalogo-main {
+    padding: 1.5rem 1.25rem 2.5rem;
+  }
+
+  .catalogo-header h1 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .catalogo-main {
+    padding: 1rem 1rem 2rem;
+  }
+
+  .catalogo-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .categorias-filtro {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .categorias-filtro::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  .cat-pill {
+    flex-shrink: 0;
+  }
+
+  .produtos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .produto-card {
+    padding: 1rem;
+  }
+}

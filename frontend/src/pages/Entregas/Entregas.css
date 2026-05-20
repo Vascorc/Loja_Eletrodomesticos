@@ -1,0 +1,631 @@
+/* Estilos Premium para a Página de Acompanhamento de Entregas */
+
+.entregas-page {
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  font-family: 'Inter', sans-serif;
+  padding-bottom: 3rem;
+}
+
+.entregas-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.entregas-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.entregas-header h1 {
+  font-size: 2.25rem;
+  color: #1e3a8a;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.entregas-header p {
+  color: #4b5563;
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- Estados (Loading, Empty, Erro) --- */
+
+.entregas-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  margin: 2rem auto 0 auto;
+  max-width: 480px;
+  border: 1px solid #e5e7eb;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3.5px solid #f3f4f6;
+  border-top: 3.5px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-msg {
+  border-left: 6px solid #ef4444;
+}
+
+.error-msg p {
+  color: #ef4444;
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-retry {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-retry:hover {
+  background-color: #dc2626;
+}
+
+.empty-state {
+  border: 2px dashed #cbd5e1;
+  background: transparent;
+  box-shadow: none;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  font-size: 1.5rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+.btn-shop {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-shop:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* --- Lista de Entregas --- */
+
+.entregas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.entrega-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 1.75rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.entrega-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Info do Topo do Cartão --- */
+
+.card-top-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.order-id {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.order-date {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.order-badge-total {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.status-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Estilos de Cores dos Estados */
+.status-registered {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+.status-processing {
+  background-color: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fef3c7;
+}
+
+.status-transit {
+  background-color: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+
+.status-delivered {
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.order-total {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1e3a8a;
+  background-color: #f8fafc;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+}
+
+/* --- Timeline de Progresso Visual --- */
+
+.progress-timeline-container {
+  position: relative;
+  margin: 2.5rem 0 3rem 0;
+  padding: 0 1rem;
+}
+
+.progress-bar-background {
+  position: absolute;
+  top: 15px;
+  left: 3rem;
+  right: 3rem;
+  height: 6px;
+  background-color: #e2e8f0;
+  border-radius: 999px;
+  z-index: 1;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6 0%, #10b981 100%);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.timeline-stages {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.stage-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 6rem;
+  text-align: center;
+}
+
+.node-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: #64748b;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  border: 3px solid white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.node-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-top: 0.5rem;
+  white-space: nowrap;
+}
+
+/* Estado Ativo dos Nodes */
+.stage-node.active .node-dot {
+  background-color: #2563eb;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+/* O quarto nó (Entregue) brilha em verde ao ficar ativo */
+.stage-node:last-child.active .node-dot {
+  background-color: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.stage-node.active .node-label {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+/* --- Caixa de Informações ETA e Countdown --- */
+
+.eta-info-box {
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.eta-delivered-msg {
+  color: #065f46;
+  font-size: 0.95rem;
+  margin: 0;
+  text-align: center;
+}
+
+.eta-countdown-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.eta-date {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #1e3a8a;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(30, 58, 138, 0.25);
+  animation: pulse-border 2s infinite alternate;
+}
+
+@keyframes pulse-border {
+  0% { box-shadow: 0 4px 10px rgba(30, 58, 138, 0.25); }
+  100% { box-shadow: 0 4px 15px rgba(37, 99, 235, 0.5); }
+}
+
+.countdown-title {
+  font-weight: 500;
+  margin-right: 0.25rem;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.timer-unit {
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+
+.timer-unit strong {
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+/* --- Ações do Cartão --- */
+
+.card-actions {
+  display: flex;
+  gap: 1rem;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1.25rem;
+}
+
+.btn-details-toggle {
+  flex: 1;
+  background: white;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-details-toggle:hover {
+  background-color: #f8fafc;
+  color: #1e293b;
+  border-color: #94a3b8;
+}
+
+.btn-fatura-link {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-fatura-link:hover {
+  background-color: #1d4ed8;
+}
+
+/* --- Área de Detalhes Expandida --- */
+
+.expanded-details-area {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background-color: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.expanded-details-area h4 {
+  font-size: 0.95rem;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+}
+
+.items-spinner-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #64748b;
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
+
+.no-items-msg {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.details-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.details-item-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.2fr 1.2fr;
+  align-items: center;
+  font-size: 0.88rem;
+  color: #334155;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  gap: 0.5rem;
+}
+
+.item-row-name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #1e293b;
+}
+
+.item-row-qtd {
+  color: #64748b;
+}
+
+.item-row-price {
+  color: #64748b;
+  text-align: right;
+}
+
+.item-row-subtotal {
+  font-weight: 700;
+  color: #1e3a8a;
+  text-align: right;
+}
+
+/* --- Media Queries de Responsividade --- */
+
+@media (max-width: 768px) {
+  .entregas-content {
+    padding: 20px 15px;
+  }
+
+  .entregas-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .entrega-card {
+    padding: 1.25rem;
+  }
+
+  .card-top-info {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .order-badge-total {
+    justify-content: space-between;
+  }
+
+  /* Timeline compacta/vertical em dispositivos móveis */
+  .progress-bar-background {
+    display: none;
+  }
+
+  .timeline-stages {
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-left: 0.5rem;
+    position: relative;
+  }
+
+  /* Adicionar uma linha vertical por trás dos nós */
+  .timeline-stages::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 17px;
+    width: 3px;
+    background-color: #e2e8f0;
+    z-index: 1;
+  }
+
+  /* Colorir a linha vertical com base nas etapas completadas */
+  .stage-node {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    gap: 1rem;
+    z-index: 2;
+  }
+
+  .node-dot {
+    border-width: 2px;
+    flex-shrink: 0;
+  }
+
+  .node-label {
+    margin-top: 0;
+  }
+
+  .progress-timeline-container {
+    margin: 1.5rem 0 2rem 0;
+    padding: 0;
+  }
+
+  .eta-countdown-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .countdown-timer {
+    justify-content: center;
+  }
+
+  .card-actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-fatura-link {
+    justify-content: center;
+  }
+
+  .details-item-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    padding: 0.75rem;
+  }
+
+  .item-row-price {
+    text-align: left;
+  }
+
+  .item-row-subtotal {
+    text-align: left;
+    margin-top: 0.25rem;
+    border-top: 1px dashed #f1f5f9;
+    padding-top: 0.25rem;
+  }
+}

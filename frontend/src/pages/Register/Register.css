@@ -140,3 +140,21 @@
   color: var(--dark-blue);
   text-decoration: underline;
 }
+
+@media (max-width: 480px) {
+  .register-page {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 1rem 0.75rem;
+  }
+
+  .register-container {
+    padding: 1.5rem;
+  }
+
+  .register-header h2 {
+    font-size: 1.5rem;
+  }
+}

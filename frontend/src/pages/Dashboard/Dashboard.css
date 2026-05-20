@@ -99,3 +99,39 @@
   background-color: #1E3A8A;
 }
 
+@media (max-width: 1024px) {
+  .dashboard-content {
+    padding: 1.5rem 3%;
+  }
+
+  .hero-banner h1 {
+    font-size: 1.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 1rem;
+  }
+
+  .hero-banner {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-banner h1 {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+}
+

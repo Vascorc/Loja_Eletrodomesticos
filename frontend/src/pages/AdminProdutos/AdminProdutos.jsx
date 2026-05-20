@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { produtoService, categoriaService } from '../../services/produtoService';
 import './AdminProdutos.css';
 
@@ -22,6 +23,7 @@ const AdminProdutos = () => {
   const [loading, setLoading] = useState(true);
   const [guardando, setGuardando] = useState(false);
   const [erro, setErro] = useState('');
+  const navigate = useNavigate();
 
   const carregar = async () => {
     setLoading(true);
@@ -119,6 +121,12 @@ const AdminProdutos = () => {
             <p>{produtos.length} produto{produtos.length !== 1 ? 's' : ''} no catálogo</p>
           </div>
           <button className="btn-novo" onClick={abrirNovo}>+ Novo Produto</button>
+        </div>
+
+        <div className="admin-subheader">
+          <button className="btn-secondary" onClick={() => navigate('/admin/vendas')}>
+            Ver todas as vendas
+          </button>
         </div>
 
         {loading ? (

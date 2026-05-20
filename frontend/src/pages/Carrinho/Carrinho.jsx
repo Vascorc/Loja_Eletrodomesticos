@@ -40,7 +40,12 @@ const Carrinho = () => {
                         <button className="btn-close" onClick={() => setIsCartOpen(false)}>&times;</button>
                     </div>
                     <div className="carrinho-vazio">
-                        <button onClick={() => { setIsCartOpen(false); navigate('/catalogo'); }} className="btn-primary">Ver Produtos</button>
+                        <div className="empty-cart-card">
+                            <div className="empty-cart-icon">🛒</div>
+                            <h3>Sem artigos no carrinho</h3>
+                            <p>Escolha um produto e adicione ao carrinho para continuar.</p>
+                            <button onClick={() => { setIsCartOpen(false); navigate('/catalogo'); }} className="btn-primary">Ver Produtos</button>
+                        </div>
                     </div>
                 </div>
             </>
@@ -63,14 +68,25 @@ const Carrinho = () => {
                                 <p className="preco">{item.preco.toFixed(2)} €</p>
                             </div>
                             <div className="item-actions">
-                                <input
-                                    type="number"
-                                    min="1"
-                                    max={item.stock}
-                                    value={item.quantidade}
-                                    onChange={(e) => updateQuantity(item.produtoId, parseInt(e.target.value))}
-                                    className="qtd-input"
-                                />
+                                <div className="qtd-selector">
+                                    <button 
+                                        onClick={() => updateQuantity(item.produtoId, item.quantidade - 1)}
+                                        disabled={item.quantidade <= 1}
+                                        className="btn-qtd btn-qtd-minus"
+                                        type="button"
+                                    >
+                                        −
+                                    </button>
+                                    <span className="qtd-value">{item.quantidade}</span>
+                                    <button 
+                                        onClick={() => updateQuantity(item.produtoId, item.quantidade + 1)}
+                                        disabled={item.quantidade >= item.stock}
+                                        className="btn-qtd btn-qtd-plus"
+                                        type="button"
+                                    >
+                                        +
+                                    </button>
+                                </div>
                                 <button onClick={() => removeFromCart(item.produtoId)} className="btn-remove">Remover</button>
                             </div>
                         </div>

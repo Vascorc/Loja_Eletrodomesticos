@@ -10,6 +10,8 @@ import Carrinho from './pages/Carrinho/Carrinho';
 import Checkout from './pages/Checkout/Checkout';
 import Fatura from './pages/Fatura/Fatura';
 import ProdutoDetalhes from './pages/ProdutoDetalhes/ProdutoDetalhes';
+import Vendas from './pages/Vendas/Vendas';
+import Entregas from './pages/Entregas/Entregas';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
 
@@ -81,6 +83,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/entregas"
+            element={
+              <ProtectedRoute>
+                <Entregas />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Rota Protegida apenas para ADMIN */}
           <Route
@@ -88,6 +98,14 @@ function App() {
             element={
               <ProtectedRoute requiredRole="ADMIN">
                 <AdminProdutos />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/vendas"
+            element={
+              <ProtectedRoute requiredRole="ADMIN">
+                <Vendas />
               </ProtectedRoute>
             }
           />

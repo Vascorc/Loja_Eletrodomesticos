@@ -1,33 +1,97 @@
+/* Checkout.css - Premium e-commerce light theme */
+
 .checkout-container, .checkout-vazio {
-    padding: 2rem;
-    max-width: 900px;
+    padding: 2.5rem 5%;
+    max-width: 1000px;
     margin: 0 auto;
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.4s ease;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.checkout-container h2 {
+    color: var(--dark-blue);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
 }
 
 .checkout-vazio {
     text-align: center;
-    margin-top: 5rem;
+    margin-top: 4rem;
+    background: var(--white);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.checkout-vazio h2 {
+    color: var(--dark-blue);
+    margin-bottom: 0.5rem;
+}
+
+.checkout-vazio p {
+    color: var(--text-gray);
+    margin-bottom: 1.5rem;
 }
 
 .checkout-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.2fr 1fr;
     gap: 2rem;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
+    align-items: start;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1024px) {
+    .checkout-container,
+    .checkout-vazio {
+        padding: 2rem 3%;
+    }
 }
 
 @media (max-width: 768px) {
+    .checkout-container,
+    .checkout-vazio {
+        padding: 1rem;
+    }
+
     .checkout-content {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .resumo-pedido,
+    .checkout-form {
+        padding: 1.5rem;
+    }
+
+    .checkout-vazio {
+        margin-top: 2rem;
     }
 }
 
 .resumo-pedido, .checkout-form {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--white);
     padding: 2rem;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.resumo-pedido h3, .checkout-form h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    color: var(--dark-blue);
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-bottom: 1px solid #F3F4F6;
+    padding-bottom: 0.75rem;
 }
 
 .resumo-item {
@@ -35,15 +99,28 @@
     justify-content: space-between;
     margin-bottom: 1rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid #F3F4F6;
+    color: var(--text-gray);
+    font-size: 0.95rem;
+}
+
+.resumo-item span:first-child {
+    font-weight: 500;
+}
+
+.resumo-item span:last-child {
+    font-weight: 600;
+    color: var(--dark-blue);
 }
 
 .resumo-total {
     display: flex;
     justify-content: space-between;
     margin-top: 1.5rem;
-    font-size: 1.2rem;
-    color: #4CAF50;
+    padding-top: 0.5rem;
+    font-size: 1.25rem;
+    color: #16A34A;
+    font-weight: 700;
 }
 
 .form-group {
@@ -54,45 +131,65 @@
 
 .form-group label {
     margin-bottom: 0.5rem;
-    color: #aaa;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .form-group select {
-    padding: 0.8rem;
+    padding: 0.8rem 1rem;
     border-radius: 8px;
-    border: 1px solid #444;
-    background: #222;
-    color: white;
-    font-size: 1rem;
+    border: 1px solid #D1D5DB;
+    background: var(--white);
+    color: var(--text-gray);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group select:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 .btn-confirmar {
     width: 100%;
-    background: linear-gradient(135deg, #4CAF50, #2E7D32);
-    color: white;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: var(--white);
     border: none;
     padding: 1rem;
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
-    font-size: 1.1rem;
-    transition: opacity 0.3s ease;
+    font-size: 1.05rem;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
 }
 
 .btn-confirmar:hover:not(:disabled) {
-    opacity: 0.9;
+    box-shadow: 0 6px 12px -1px rgba(16, 185, 129, 0.3);
+}
+
+.btn-confirmar:active:not(:disabled) {
+    transform: scale(0.98);
 }
 
 .btn-confirmar:disabled {
-    background: #555;
+    background: #D1D5DB;
+    color: #9CA3AF;
+    box-shadow: none;
     cursor: not-allowed;
 }
 
 .error-message {
-    background: rgba(255, 77, 77, 0.1);
-    color: #ff4d4d;
-    padding: 1rem;
+    background: #FEF2F2;
+    color: #DC2626;
+    padding: 0.75rem 1rem;
     border-radius: 8px;
     margin-bottom: 1.5rem;
-    border: 1px solid #ff4d4d;
+    border: 1px solid #FCA5A5;
+    font-size: 0.875rem;
+    font-weight: 500;
 }

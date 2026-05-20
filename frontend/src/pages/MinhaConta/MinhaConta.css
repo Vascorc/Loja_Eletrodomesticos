@@ -27,7 +27,7 @@
 
 .account-sections {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
 }
 
@@ -82,4 +82,137 @@
 
 .admin-btn:hover {
   background-color: #1d4ed8;
+}
+
+.admin-btn-secondary {
+  margin-top: 10px;
+}
+
+.historico-table-wrapper {
+  max-height: 180px;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 1rem;
+}
+
+.historico-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.historico-table thead tr {
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.historico-table th {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  box-shadow: inset 0 -1px 0 #e5e7eb;
+}
+
+.historico-table th,
+.historico-table td {
+  padding: 0.5rem 0.35rem;
+  font-size: 0.85rem;
+}
+
+.historico-table tbody tr {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.btn-ver-fatura {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.btn-ver-fatura:hover {
+  background: #1d4ed8;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.btn-seguir-entrega {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.btn-seguir-entrega:hover {
+  background: #059669;
+}
+
+/* .account-card-full no longer spans full width to allow side-by-side alignment */
+.account-card-full {
+  grid-column: auto;
+}
+
+.historico-table-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.historico-table-wrapper::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+.historico-table-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.historico-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media (max-width: 1024px) {
+  .minhaconta-content {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .account-sections {
+    gap: 16px;
+  }
+
+  .account-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .minhaconta-content {
+    padding: 1rem;
+  }
+
+  .profile-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .account-sections {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .account-card {
+    padding: 1.25rem;
+  }
 }

@@ -76,3 +76,14 @@
     cursor: not-allowed;
     color: #888;
 }
+
+@media (max-width: 768px) {
+    .produtos-container {
+        padding: 1rem;
+    }
+
+    .produtos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+}

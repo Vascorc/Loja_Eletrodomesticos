@@ -5,14 +5,23 @@ import { produtoService } from '../../services/produtoService';
 import { useCart } from '../../context/CartContext';
 import './Navbar.css';
 
+const CATEGORIAS_FIXAS = [
+  { id: 1, nome: 'Grandes Eletrodomésticos' },
+  { id: 2, nome: 'Televisores' },
+  { id: 3, nome: 'Informática' },
+  { id: 4, nome: 'Pequenos Eletrodomésticos' },
+  { id: 5, nome: 'Promoções do Dia' },
+];
+
 const Navbar = () => {
   const user = AuthService.getCurrentUser();
-  const { cart, cartTotal } = useCart();
+  const { cart, cartTotal, setIsCartOpen } = useCart();
   const navigate = useNavigate();
   const [navSearchTerm, setNavSearchTerm] = useState('');
   const [sugestoes, setSugestoes] = useState([]);
   const [showSugestoes, setShowSugestoes] = useState(false);
   const [produtos, setProdutos] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
   const searchRef = useRef(null);
 
   useEffect(() => {
@@ -73,6 +82,16 @@ const Navbar = () => {
           ELECTRO-SD
         </div>
 
+        <button
+          type="button"
+          className="nav-menu-toggle"
+          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(prev => !prev)}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+
         <form className="nav-search" onSubmit={handleNavSearch} ref={searchRef} style={{ position: 'relative' }}>
           <input
             type="text"
@@ -105,16 +124,16 @@ const Navbar = () => {
           )}
         </form>
 
-        <div className="nav-actions">
-          <Link to="/minha-conta" className="nav-item" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <span>Olá, {user.email.split('@')[0]}</span>
+        <div className={`nav-actions ${menuOpen ? 'nav-actions-open' : ''}`}>
+          <Link to="/minha-conta" className="nav-item" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setMenuOpen(false)}>
+            <span className="nav-item-label">Olá, {user.email.split('@')[0]}</span>
             <span>Minha Conta</span>
           </Link>
-          <div className="nav-item">
-            <span>Encomendas</span>
-            <span>& Devoluções</span>
-          </div>
-          <div onClick={() => navigate('/carrinho')} className="nav-item">
+          <Link to="/entregas" className="nav-item" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setMenuOpen(false)}>
+            <span>Acompanhar</span>
+            <span>Entregas</span>
+          </Link>
+          <div onClick={() => { setIsCartOpen(true); setMenuOpen(false); }} className="nav-item" style={{ cursor: 'pointer' }}>
             <span>🛒 Carrinho</span>
             <span>{cart.length} itens ({cartTotal.toFixed(2)} €)</span>
           </div>
@@ -122,12 +141,17 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="nav-bottom">
-        <span>Todas as Categorias</span>
-        <span>Grandes Eletrodomésticos</span>
-        <span>Televisores</span>
-        <span>Informática</span>
-        <span>Promoções do Dia</span>
+      <div className={`nav-bottom ${menuOpen ? 'nav-bottom-open' : ''}`}>
+        <span onClick={() => { navigate('/catalogo'); setMenuOpen(false); }} style={{ cursor: 'pointer' }}>Todas as Categorias</span>
+        {CATEGORIAS_FIXAS.map(cat => (
+          <span
+            key={cat.id}
+            onClick={() => { navigate(`/catalogo?cat=${cat.id}`); setMenuOpen(false); }}
+            style={{ cursor: 'pointer' }}
+          >
+            {cat.nome}
+          </span>
+        ))}
       </div>
     </nav>
   );

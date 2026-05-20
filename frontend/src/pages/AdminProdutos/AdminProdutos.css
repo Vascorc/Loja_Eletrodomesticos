@@ -57,6 +57,26 @@
   transform: scale(0.98);
 }
 
+.admin-subheader {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+}
+
+.btn-secondary {
+  padding: 0.75rem 1.25rem;
+  background: #F8FAFC;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background: #E2E8F0;
+}
+
 /* ── Estados (loading, erro) ────────────────────────────────────── */
 
 .admin-estado {
@@ -383,4 +403,50 @@
 .btn-guardar:disabled {
   background: #93C5FD;
   cursor: not-allowed;
+}
+
+@media (max-width: 1024px) {
+  .admin-main {
+    padding: 1.5rem 1.25rem 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-main {
+    padding: 1rem;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-novo {
+    width: 100%;
+    text-align: center;
+  }
+
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .produtos-table {
+    min-width: 640px;
+    font-size: 0.85rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancelar,
+  .btn-guardar {
+    width: 100%;
+    text-align: center;
+  }
 }

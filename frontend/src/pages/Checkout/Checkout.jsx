@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar/Navbar';
 import './Checkout.css';
 
 const Checkout = () => {
@@ -49,49 +50,65 @@ const Checkout = () => {
         }
     };
 
-    if (cart.length === 0) return <div className="checkout-vazio">Sem itens para checkout.</div>;
+    if (cart.length === 0) {
+        return (
+            <>
+                <Navbar />
+                <div className="checkout-vazio">
+                    <h2>O seu carrinho está vazio</h2>
+                    <p>Adicione artigos ao carrinho no catálogo para poder finalizar a compra.</p>
+                    <button onClick={() => navigate('/catalogo')} className="btn-confirmar" style={{ maxWidth: '280px', margin: '2rem auto 0', display: 'block' }}>
+                        Ir para o Catálogo
+                    </button>
+                </div>
+            </>
+        );
+    }
 
     return (
-        <div className="checkout-container">
-            <h2>Finalizar Compra</h2>
-            <div className="checkout-content">
-                <div className="resumo-pedido">
-                    <h3>Resumo do Pedido</h3>
-                    {cart.map(item => (
-                        <div key={item.produtoId} className="resumo-item">
-                            <span>{item.quantidade}x {item.nome}</span>
-                            <span>{(item.preco * item.quantidade).toFixed(2)} €</span>
+        <>
+            <Navbar />
+            <div className="checkout-container">
+                <h2>Finalizar Compra</h2>
+                <div className="checkout-content">
+                    <div className="resumo-pedido">
+                        <h3>Resumo do Pedido</h3>
+                        {cart.map(item => (
+                            <div key={item.produtoId} className="resumo-item">
+                                <span>{item.quantidade}x {item.nome}</span>
+                                <span>{(item.preco * item.quantidade).toFixed(2)} €</span>
+                            </div>
+                        ))}
+                        <div className="resumo-total">
+                            <strong>Total a Pagar:</strong>
+                            <strong>{cartTotal.toFixed(2)} €</strong>
                         </div>
-                    ))}
-                    <div className="resumo-total">
-                        <strong>Total a Pagar:</strong>
-                        <strong>{cartTotal.toFixed(2)} €</strong>
                     </div>
+
+                    <form onSubmit={handleCheckout} className="checkout-form">
+                        <h3>Dados de Pagamento</h3>
+                        <div className="form-group">
+                            <label>Método de Pagamento</label>
+                            <select 
+                                value={metodoPagamento} 
+                                onChange={(e) => setMetodoPagamento(e.target.value)}
+                                required
+                            >
+                                <option value="Pagamento na entrega">Pagamento no momento da entrega</option>
+                                <option value="Multibanco" disabled>Multibanco (Indisponível)</option>
+                                <option value="MBWay" disabled>MBWay (Indisponível)</option>
+                            </select>
+                        </div>
+
+                        {error && <div className="error-message">{error}</div>}
+
+                        <button type="submit" className="btn-confirmar" disabled={loading}>
+                            {loading ? 'A Processar...' : 'Confirmar Encomenda'}
+                        </button>
+                    </form>
                 </div>
-
-                <form onSubmit={handleCheckout} className="checkout-form">
-                    <h3>Dados de Pagamento</h3>
-                    <div className="form-group">
-                        <label>Método de Pagamento</label>
-                        <select 
-                            value={metodoPagamento} 
-                            onChange={(e) => setMetodoPagamento(e.target.value)}
-                            required
-                        >
-                            <option value="Pagamento na entrega">Pagamento no momento da entrega</option>
-                            <option value="Multibanco" disabled>Multibanco (Indisponível)</option>
-                            <option value="MBWay" disabled>MBWay (Indisponível)</option>
-                        </select>
-                    </div>
-
-                    {error && <div className="error-message">{error}</div>}
-
-                    <button type="submit" className="btn-confirmar" disabled={loading}>
-                        {loading ? 'A Processar...' : 'Confirmar Encomenda'}
-                    </button>
-                </form>
             </div>
-        </div>
+        </>
     );
 };
 

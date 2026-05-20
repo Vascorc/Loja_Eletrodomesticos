@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthService from '../../services/auth.service';
+import Navbar from '../../components/Navbar/Navbar';
 import './MinhaConta.css';
 
 const MinhaConta = () => {
@@ -36,19 +37,7 @@ const MinhaConta = () => {
 
   return (
     <div className="minhaconta-page">
-      <nav className="dashboard-nav">
-        <div className="nav-top">
-          <Link to="/" className="nav-logo" style={{ textDecoration: 'none', color: 'inherit' }}>ELECTRO-SD</Link>
-          
-          <div className="nav-actions">
-            <Link to="/catalogo" className="nav-item" style={{ textDecoration: 'none', color: 'inherit' }}>
-              <span>⬅ Voltar</span>
-              <span>à Loja</span>
-            </Link>
-            <span onClick={handleLogout} className="logout-link">Sair</span>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       <main className="minhaconta-content">
         <section className="profile-header">
@@ -64,36 +53,53 @@ const MinhaConta = () => {
             <p><strong>Cargo:</strong> {user.perfil}</p>
           </div>
 
-          <div className="account-card" style={{ flexBasis: '100%' }}>
+          <div className="account-card account-card-full">
             <h3>Histórico de Compras</h3>
             {historico.length === 0 ? (
                 <p>Ainda não tens encomendas registadas.</p>
             ) : (
-                <table className="historico-table" style={{ width: '100%', marginTop: '1rem', borderCollapse: 'collapse' }}>
+                <div className="historico-table-wrapper">
+                  <table className="historico-table">
                     <thead>
-                        <tr style={{ textAlign: 'left', borderBottom: '1px solid #444' }}>
-                            <th style={{ padding: '0.5rem' }}>Data</th>
-                            <th style={{ padding: '0.5rem' }}>Total</th>
-                            <th style={{ padding: '0.5rem' }}>Ação</th>
+                        <tr>
+                            <th>Data</th>
+                            <th>Total</th>
+                            <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
                         {historico.map(venda => (
-                            <tr key={venda.id} style={{ borderBottom: '1px solid #222' }}>
-                                <td style={{ padding: '0.5rem' }}>{new Date(venda.dataVenda).toLocaleString()}</td>
-                                <td style={{ padding: '0.5rem' }}>{venda.valorTotal.toFixed(2)} €</td>
-                                <td style={{ padding: '0.5rem' }}>
-                                    <button 
-                                        onClick={() => navigate('/fatura', { state: { faturaId: venda.id } })}
-                                        style={{ background: '#2196F3', color: 'white', border: 'none', padding: '0.3rem 0.8rem', borderRadius: '4px', cursor: 'pointer' }}
-                                    >
-                                        Ver Fatura
-                                    </button>
+                            <tr key={venda.id}>
+                                <td>
+                                    <div style={{ fontWeight: '500' }}>{new Date(venda.dataVenda).toLocaleDateString()}</div>
+                                    <div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '2px' }}>
+                                        {new Date(venda.dataVenda).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                                </td>
+                                <td>{venda.valorTotal.toFixed(2)} €</td>
+                                <td>
+                                    <div className="table-actions">
+                                        <button
+                                            type="button"
+                                            className="btn-ver-fatura"
+                                            onClick={() => navigate('/fatura', { state: { faturaId: venda.id } })}
+                                        >
+                                            Ver Fatura
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn-seguir-entrega"
+                                            onClick={() => navigate('/entregas')}
+                                        >
+                                            Seguir Entrega
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                  </table>
+                </div>
             )}
           </div>
 
@@ -102,6 +108,9 @@ const MinhaConta = () => {
               <h3>Administração</h3>
               <p>Tens permissões de gestão.</p>
               <button className="admin-btn" onClick={() => navigate('/admin/produtos')}>Gerir Produtos</button>
+              <button className="admin-btn admin-btn-secondary" onClick={() => navigate('/admin/vendas')}>
+                Ver Todas as Vendas
+              </button>
             </div>
           )}
         </div>

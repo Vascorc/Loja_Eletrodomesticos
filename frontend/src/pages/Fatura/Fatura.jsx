@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Navbar from '../../components/Navbar/Navbar';
 import './Fatura.css';
 
 const Fatura = () => {
@@ -36,54 +37,81 @@ const Fatura = () => {
             });
     }, [faturaId, navigate]);
 
-    if (loading) return <div className="fatura-container">A carregar fatura...</div>;
-    if (error) return <div className="fatura-container error">{error}</div>;
+    if (loading) {
+        return (
+            <>
+                <Navbar />
+                <div className="fatura-container" style={{ textAlign: 'center', padding: '4rem' }}>
+                    <div className="spinner" style={{ margin: '0 auto 1rem' }}></div>
+                    <p>A carregar fatura...</p>
+                </div>
+            </>
+        );
+    }
+
+    if (error) {
+        return (
+            <>
+                <Navbar />
+                <div className="fatura-container" style={{ textAlign: 'center', padding: '4rem' }}>
+                    <div className="error-message">{error}</div>
+                    <button onClick={() => navigate('/minha-conta')} className="btn-back" style={{ marginTop: '2rem' }}>
+                        Voltar para a Minha Conta
+                    </button>
+                </div>
+            </>
+        );
+    }
+
     if (!fatura) return null;
 
     return (
-        <div className="fatura-container">
-            <div className="fatura-card">
-                <div className="fatura-header">
-                    <h2>Fatura / Recibo</h2>
-                    <p>Loja de Eletrodomésticos</p>
-                </div>
+        <>
+            <Navbar />
+            <div className="fatura-container">
+                <div className="fatura-card">
+                    <div className="fatura-header">
+                        <h2>Fatura / Recibo</h2>
+                        <p>Loja de Eletrodomésticos</p>
+                    </div>
 
-                <div className="fatura-info">
-                    <p><strong>Nº da Venda:</strong> #{fatura.id}</p>
-                    <p><strong>Data:</strong> {new Date(fatura.dataVenda).toLocaleString()}</p>
-                </div>
+                    <div className="fatura-info">
+                        <p><strong>Nº da Venda:</strong> #{fatura.id}</p>
+                        <p><strong>Data:</strong> {new Date(fatura.dataVenda).toLocaleString()}</p>
+                    </div>
 
-                <table className="fatura-table">
-                    <thead>
-                        <tr>
-                            <th>Produto</th>
-                            <th>Qtd</th>
-                            <th>Preço Unit.</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {fatura.itens.map((item, idx) => (
-                            <tr key={idx}>
-                                <td>{item.produtoNome}</td>
-                                <td>{item.quantidade}</td>
-                                <td>{item.precoUnitario.toFixed(2)} €</td>
-                                <td>{(item.quantidade * item.precoUnitario).toFixed(2)} €</td>
+                    <table className="fatura-table">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Qtd</th>
+                                <th>Preço Unit.</th>
+                                <th>Subtotal</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {fatura.itens.map((item, idx) => (
+                                <tr key={idx}>
+                                    <td>{item.produtoNome}</td>
+                                    <td>{item.quantidade}</td>
+                                    <td>{item.precoUnitario.toFixed(2)} €</td>
+                                    <td>{(item.quantidade * item.precoUnitario).toFixed(2)} €</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
 
-                <div className="fatura-total">
-                    <h3>Total Pago: {fatura.valorTotal.toFixed(2)} €</h3>
-                </div>
+                    <div className="fatura-total">
+                        <h3>Total Pago: {fatura.valorTotal.toFixed(2)} €</h3>
+                    </div>
 
-                <div className="fatura-actions">
-                    <button onClick={() => window.print()} className="btn-print">Imprimir Fatura</button>
-                    <button onClick={() => navigate('/minha-conta')} className="btn-back">Ver Histórico</button>
+                    <div className="fatura-actions">
+                        <button onClick={() => window.print()} className="btn-print">Imprimir Fatura</button>
+                        <button onClick={() => navigate('/minha-conta')} className="btn-back">Ver Histórico</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

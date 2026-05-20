@@ -13,13 +13,14 @@ const EFICIENCIA_COR = {
 
 
 const CatalogoPage = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get('q') || '';
+  const categoryParam = searchParams.get('cat');
   
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [pesquisa, setPesquisa] = useState(queryParam);
-  const [categoriaAtiva, setCategoriaAtiva] = useState(null);
+  const [categoriaAtiva, setCategoriaAtiva] = useState(categoryParam ? parseInt(categoryParam) : null);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState('');
   const [addedId, setAddedId] = useState(null);
@@ -40,7 +41,8 @@ const CatalogoPage = () => {
 
   useEffect(() => {
     setPesquisa(queryParam);
-  }, [queryParam]);
+    setCategoriaAtiva(categoryParam ? parseInt(categoryParam) : null);
+  }, [queryParam, categoryParam]);
 
   const produtosFiltrados = produtos.filter(p => {
     const matchNome = pesquisa === '' || (p.nome || '').toLowerCase().includes(pesquisa.toLowerCase());
@@ -52,6 +54,16 @@ const CatalogoPage = () => {
     addToCart(produto);
     setAddedId(produto.id);
     setTimeout(() => setAddedId(null), 1500);
+  };
+
+  const handleCategoriaChange = (id) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (id === null) {
+      newParams.delete('cat');
+    } else {
+      newParams.set('cat', id.toString());
+    }
+    setSearchParams(newParams);
   };
 
   return (
@@ -81,7 +93,7 @@ const CatalogoPage = () => {
         <div className="categorias-filtro">
           <button
             className={`cat-pill ${categoriaAtiva === null ? 'active' : ''}`}
-            onClick={() => setCategoriaAtiva(null)}
+            onClick={() => handleCategoriaChange(null)}
           >
             Todos
           </button>
@@ -89,7 +101,7 @@ const CatalogoPage = () => {
             <button
               key={cat.id}
               className={`cat-pill ${categoriaAtiva === cat.id ? 'active' : ''}`}
-              onClick={() => setCategoriaAtiva(cat.id)}
+              onClick={() => handleCategoriaChange(cat.id)}
             >
               {cat.nome}
               <span className="cat-count">{cat.totalProdutos}</span>
