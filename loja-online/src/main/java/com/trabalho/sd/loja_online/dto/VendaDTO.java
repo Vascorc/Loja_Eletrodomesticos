@@ -10,4 +10,6 @@ public class VendaDTO {
     private LocalDateTime dataVenda;
     private Double valorTotal;
     private List<ItemVendaDTO> itens;
+    private String clienteNome;
+    private String clienteEmail;
 }

@@ -119,12 +119,23 @@ public class VendaService {
         return toDTO(venda);
     }
 
+    public List<VendaDTO> getHistoricoTodos() {
+        return vendaRepository.findAll().stream()
+                .sorted((a, b) -> b.getDataVenda().compareTo(a.getDataVenda()))
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
     private VendaDTO toDTO(Venda venda) {
         VendaDTO dto = new VendaDTO();
         dto.setId(venda.getId());
         dto.setDataVenda(venda.getDataVenda());
         dto.setValorTotal(venda.getValorTotal());
         dto.setItens(venda.getItens().stream().map(this::toItemDTO).collect(Collectors.toList()));
+        if (venda.getUtilizador() != null) {
+            dto.setClienteNome(venda.getUtilizador().getNome());
+            dto.setClienteEmail(venda.getUtilizador().getEmail());
+        }
         return dto;
     }
 
