@@ -27,6 +27,13 @@ public class Venda implements Serializable {
     @Column(nullable = false)
     private Double valorTotal;
 
+    private String metodoPagamento;
+    private String nomeDestinatario;
+    private String morada;
+    private String cidade;
+    private String codigoPostal;
+    private String telefone;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utilizador_id", nullable = false)
     private Utilizador utilizador;

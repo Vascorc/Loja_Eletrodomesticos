@@ -43,6 +43,12 @@ public class VendaService {
         Venda venda = new Venda();
         venda.setUtilizador(utilizador);
         venda.setDataVenda(LocalDateTime.now());
+        venda.setMetodoPagamento(request.getMetodoPagamento());
+        venda.setNomeDestinatario(request.getNomeDestinatario());
+        venda.setMorada(request.getMorada());
+        venda.setCidade(request.getCidade());
+        venda.setCodigoPostal(request.getCodigoPostal());
+        venda.setTelefone(request.getTelefone());
         
         double valorTotal = 0.0;
         List<ItemVenda> itensVenda = new ArrayList<>();
@@ -136,6 +142,12 @@ public class VendaService {
             dto.setClienteNome(venda.getUtilizador().getNome());
             dto.setClienteEmail(venda.getUtilizador().getEmail());
         }
+        dto.setMetodoPagamento(venda.getMetodoPagamento());
+        dto.setNomeDestinatario(venda.getNomeDestinatario());
+        dto.setMorada(venda.getMorada());
+        dto.setCidade(venda.getCidade());
+        dto.setCodigoPostal(venda.getCodigoPostal());
+        dto.setTelefone(venda.getTelefone());
         return dto;
     }
 

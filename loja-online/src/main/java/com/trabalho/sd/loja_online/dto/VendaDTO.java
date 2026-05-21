@@ -12,4 +12,10 @@ public class VendaDTO {
     private List<ItemVendaDTO> itens;
     private String clienteNome;
     private String clienteEmail;
+    private String metodoPagamento;
+    private String nomeDestinatario;
+    private String morada;
+    private String cidade;
+    private String codigoPostal;
+    private String telefone;
 }
