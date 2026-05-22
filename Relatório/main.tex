@@ -72,7 +72,6 @@
     \item[Thread] Linha de execução independente e secundária dentro de um processo principal, permitindo a concorrência computacional.
 \end{description}
 
-<<<<
 \chapter{Introdução}
 
 \section{Enquadramento}
@@ -90,37 +89,17 @@ Os objetivos específicos incluem:
     \item \textbf{Implementação de um sistema de segurança robusto com autenticação JWT (JSON Web Tokens).}
     \item Gestão de sessões stateless para garantir escalabilidade.
     \item Integração do Frontend com o Backend através de serviços assíncronos.
-    \item [Aqui ficará o objetivo relacionado com as Estatísticas/Faturas].
+    \item Desenvolvimento de lógica distribuída para processamento de vendas, faturas e controle de stocks concorrente.
 \end{enumerate}
-====
-\chapter{Introdução}
-
-\section{Enquadramento}
-No âmbito da unidade curricular de Sistemas Distribuídos, foi proposto o desenvolvimento de uma aplicação web completa para uma loja online. O tema escolhido pelo grupo foi uma \textbf{Loja de Eletrodomésticos}, implementada recorrendo à framework Spring para o backend e tecnologias web modernas para o frontend.
-
-Este projeto foca-se na criação de serviços RESTful, persistência de dados e, crucialmente, na segurança e gestão de sessões de utilizadores num ambiente distribuído. Todo o código-fonte pode ser consultado no repositório GitHub do projeto.
-
-\section{Objetivos}
-O objetivo principal é conceber uma plataforma robusta que permita a gestão de um catálogo de produtos, a realização de compras por clientes registados e a administração de stocks.
-
-Os objetivos específicos incluem:
-\begin{enumerate}
-    \item Implementação de uma API RESTful utilizando Spring Boot.
-    \item Persistência de dados num SGBD relacional (PostgreSQL).
-    \item \textbf{Implementação de um sistema de segurança robusto com autenticação JWT (JSON Web Tokens).}
-    \item Gestão de sessões stateless para garantir escalabilidade.
-    \item [Aqui ficará o objetivo relacionado com o Frontend].
-    \item [Aqui ficará o objetivo relacionado com as Estatísticas/Faturas].
-\end{enumerate}
-
 
 \section{Organização do Documento}
-Para descrever melhor os procedimentos, este documento está organizado nas seguintes secções:
+Para descrever de forma clara os procedimentos, este documento está organizado nas seguintes secções:
 \begin{itemize}
-    \item \textbf{Capítulo 1 -- Introdução} -- apresenta de forma geral o tema e os objetivos do programa.
-    \item \textbf{Capítulo 2 -- Tecnologias e Ferramentas Utilizadas} -- descreve as necessidades do projeto e as ferramentas usadas para o desenvolver.
-    \item \textbf{Capítulo 3 -- Implementação e Testes} -- explica as decisões de arquitetura, segurança e as funcionalidades da loja online.
-    \item \textbf{Capítulo 4 -- Conclusões e Trabalho Futuro} -- resume o trabalho realizado e apresenta possíveis melhorias para o futuro.
+    \item \textbf{Capítulo 1 -- Introdução} -- apresenta de forma geral o tema e os objetivos do projeto.
+    \item \textbf{Capítulo 2 -- Tecnologias e Ferramentas Utilizadas} -- descreve a stack tecnológica adotada para o desenvolvimento do sistema.
+    \item \textbf{Capítulo 3 -- Implementação} -- explica em pormenor as decisões de arquitetura, o modelo de segurança e as funcionalidades da loja online.
+    \item \textbf{Capítulo 4 -- Testes e Validação do Sistema} -- detalha os testes práticos efetuados para validar o correto funcionamento de cada funcionalidade.
+    \item \textbf{Capítulo 5 -- Conclusões e Trabalho Futuro} -- sintetiza o trabalho executado e delineia possíveis melhorias futuras.
 \end{itemize}
 
 
@@ -140,36 +119,172 @@ O frontend foi construído utilizando React, uma biblioteca JavaScript para a cr
 \chapter{Implementação}
 
 \section{Arquitetura de Segurança}
-A segurança da aplicação foi desenhada para proteger os dados dos utilizadores e garantir que apenas utilizadores autorizados acedem a recursos sensíveis.
+A segurança da aplicação foi desenhada de raiz para proteger de forma robusta e consistente os dados dos utilizadores, bem como controlar o acesso a recursos sensíveis. A implementação garante a integridade de todas as rotas do frontend e endpoints REST do backend, organizando as tarefas de segurança nos seguintes eixos fundamentais:
 
-\subsection{Autenticação e Hashing de Passwords}
-O processo de autenticação baseia-se em dois fluxos principais: registo e login. No registo, os dados são validados e a password é cifrada utilizando o algoritmo \textbf{BCrypt} antes de ser persistida na base de dados. O BCrypt adiciona um "salt" aleatório a cada password, protegendo o sistema contra ataques de força bruta e dicionário.
+\subsection{Estrutura de Utilizadores e Controlo de Perfis}
+O modelo de utilizadores baseia-se na classe \texttt{Utilizador}, persistida na tabela homónima da base de dados. Cada utilizador é associado a um determinado perfil de acesso através do campo \texttt{perfil}, cujos valores possíveis são:
+\begin{itemize}
+    \item \textbf{CLIENTE}: Utilizador comum da loja, com permissão para navegar pelo catálogo, reservar produtos temporariamente no carrinho e concluir compras.
+    \item \textbf{ADMIN}: Utilizador com privilégios administrativos completos sobre a gestão de produtos, stock de inventário, categorias, e visualização de faturas e histórico global de vendas.
+\end{itemize}
+Na integração com o Spring Security, o perfil é mapeado para um conjunto de autoridades concedidas (\texttt{GrantedAuthority}), prefixado com \texttt{ROLE\_} (e.g., \texttt{ROLE\_CLIENTE} e \texttt{ROLE\_ADMIN}), viabilizando o controlo de acesso baseado em perfis tanto a nível global como a nível de controladores específicos.
 
-\subsection{Gestão de Sessões com JWT}
-Ao efetuar login com sucesso, o servidor gera um token JWT assinado digitalmente com uma chave secreta configurada em variáveis de ambiente. Este token tem uma validade de 24 horas e deve ser enviado pelo frontend em todos os pedidos subsequentes através do cabeçalho \textit{Authorization}.
+\subsection{Registo de Clientes e Fluxo de Login/Logout}
+\begin{itemize}
+    \item \textbf{Registo de Clientes}: Disponibilizado através do endpoint público \texttt{/api/auth/signup}. A password fornecida pelo utilizador é encriptada utilizando o algoritmo unidirecional robusto \textbf{BCrypt} antes de ser persistida. Isto garante que as passwords nunca são guardadas em texto limpo.
+    \item \textbf{Login}: Efetuado via \texttt{/api/auth/signin}. O \texttt{AuthenticationManager} valida o email e a password introduzidos. Caso as credenciais coincidam com os registos cifrados da BD, o servidor emite um token de autenticação assinado e configurado.
+    \item \textbf{Logout}: Gerido de forma \textit{stateless} no frontend. Ao acionar o botão de logout, a aplicação cliente elimina o token JWT armazenado no \texttt{localStorage} do browser e reencaminha o utilizador para a página de login, limpando qualquer estado em cache.
+\end{itemize}
 
-\subsection{Middleware de Segurança (Filtros)}
-Implementou-se o \texttt{AuthTokenFilter}, que estende \texttt{OncePerRequestFilter}. Este filtro interseta cada pedido HTTP, valida o token JWT e, caso seja válido, carrega os detalhes do utilizador para o contexto de segurança do Spring, permitindo que o controlador saiba quem é o utilizador ativo.
+\subsection{Gestão de Sessões Stateless com JWT e Expiração}
+Para permitir a escalabilidade distribuída do sistema, optou-se por uma gestão de sessões \textit{stateless}. O servidor não armazena nenhuma sessão em memória; toda a informação necessária para identificar e conceder permissões ao utilizador é encapsulada num token seguro do tipo \textbf{JSON Web Token (JWT)}.
+Cada token possui um tempo de expiração estrito (configurado por omissão para 24 horas). Uma vez expirado o token, a sua assinatura deixa de ser válida e o utilizador é forçado a reautenticar-se.
 
-\begin{lstlisting}[caption={Configuração do SecurityFilterChain no Backend}]
+\subsection{Filtro de Segurança e Middleware de Autenticação}
+Foi desenvolvido um middleware específico designado \texttt{AuthTokenFilter} que estende a classe \texttt{OncePerRequestFilter} do Spring Security. Este filtro é executado a cada pedido HTTP enviado para a API:
+\begin{enumerate}
+    \item Extrai o cabeçalho \textit{Authorization} do pedido e analisa o prefixo \textit{Bearer}.
+    \item Utiliza a classe utilitária \texttt{JwtUtils} para validar a assinatura, integridade e expiração do token.
+    \item Recupera a identidade do utilizador (email) a partir do token.
+    \item Carrega os dados correspondentes através de \texttt{UserDetailsServiceImpl} e estabelece o objeto \texttt{UsernamePasswordAuthenticationToken} no contexto global de segurança do Spring (\texttt{SecurityContextHolder}).
+\end{enumerate}
+
+\subsection{Proteção de Rotas e Controlo de Acesso End-to-End}
+Para assegurar a máxima proteção, as verificações foram duplicadas em ambas as camadas da aplicação:
+\begin{itemize}
+    \item \textbf{Frontend (Proteção de Rotas em React):}
+    Criou-se o componente de ordem superior \texttt{ProtectedRoute}. Este componente encapsula rotas privadas na aplicação. Se o utilizador não possuir um token ativo no \texttt{localStorage}, é reencaminhado para \texttt{/login}. 
+    Para as rotas dedicadas à administração (como \texttt{/admin/produtos} e \texttt{/admin/vendas}), o componente valida se o perfil do utilizador é estritamente \texttt{ADMIN}. Utilizadores sem o perfil devido são bloqueados e redirecionados para a raiz \texttt{/}.
+    
+    \item \textbf{Backend (Segurança Geral e Endpoints da API):}
+    A configuração da cadeia de filtros em \texttt{WebSecurityConfig} desativa a proteção CSRF (visto que as comunicações usam tokens em vez de cookies) e autoriza de forma pública apenas os endpoints estritamente necessários (registo, login e operações de consulta). Adicionalmente, implementou-se segurança ao nível do método recorrendo a anotações \texttt{@PreAuthorize}:
+\end{itemize}
+
+\begin{lstlisting}[caption={Configuração do SecurityFilterChain no Backend (WebSecurityConfig)}]
 @Bean
 public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable())
-        .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> 
-            auth.requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/produtos/public/**").permitAll()
-                .anyRequest().authenticated()
+    http.cors(Customizer.withDefaults())
+        .csrf(csrf -> csrf.disable())
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/test/**").permitAll()
+            .requestMatchers("/api/produtos/public/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/categorias/**").permitAll()
+            .anyRequest().authenticated()
         );
+    http.authenticationProvider(authenticationProvider());
+    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     return http.build();
 }
 \end{lstlisting}
+
+Para garantir que apenas administradores possam gerir produtos e categorias, aplicámos a restrição baseada em perfis diretamente nos controladores do backend:
+\begin{lstlisting}[caption={Anotação PreAuthorize no ProdutoController}]
+@PostMapping
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<ProdutoDTO> criar(@RequestBody ProdutoDTO dto) { ... }
+
+@PutMapping("/{id}")
+@PreAuthorize("hasRole('ADMIN')")
+public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoDTO dto) { ... }
+\end{lstlisting}
+
+\subsection{Validação de Dados e Proteção de Inputs}
+Para robustecer a segurança contra dados inválidos e vulnerabilidades comuns de segurança (como SQL Injections):
+\begin{itemize}
+    \item O backend utiliza mapeamento JPA e repositórios Spring Data com consultas parametrizadas, neutralizando de forma inerente ataques de injeção de código SQL.
+    \item A nível de serviços e controladores, todas as operações de escrita validam o estado das variáveis de entrada, garantindo a integridade dos dados na base de dados relacional.
+\end{itemize}
 
 \section{Integração Frontend-Backend}
 A comunicação entre as duas camadas é feita através de serviços assíncronos no frontend. Criou-se um \texttt{AuthService} em JavaScript que utiliza a API \textit{fetch} para consumir os endpoints REST do backend. O token recebido é armazenado no \texttt{localStorage} para persistência da sessão no browser.
 
 \section{Modelo de Dados}
-[Aqui ficará a descrição do modelo de dados completo].
+O modelo de dados da aplicação foi projetado para suportar todas as operações de e-commerce, o controlo transacional de inventário e o sistema de segurança stateless de forma normalizada e coerente. A persistência é gerida através da especificação JPA (Java Persistence API) com o Hibernate como fornecedor ORM subjacente, mapeando classes Java diretamente para tabelas na base de dados PostgreSQL.
+
+O modelo é constituído por 6 entidades principais, cujos propósitos e estruturas são descritos detalhadamente a seguir:
+
+\subsection{Descrição das Entidades}
+\begin{enumerate}
+    \item \textbf{Utilizador (\texttt{utilizador})}: Armazena os dados cadastrais e as credenciais de segurança de clientes e administradores.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único numérico.
+        \item \texttt{nome} (VARCHAR): Nome do utilizador.
+        \item \texttt{email} (VARCHAR, UNIQUE): Endereço de correio eletrónico, usado como credencial de login.
+        \item \texttt{password} (VARCHAR): Hash cifrado da palavra-passe gerado pelo BCrypt.
+        \item \texttt{perfil} (VARCHAR): Cargo ou privilégio do utilizador (\texttt{CLIENTE} ou \texttt{ADMIN}).
+    \end{itemize}
+
+    \item \textbf{Categoria (\texttt{categoria})}: Modela os grupos ou divisões de eletrodomésticos (e.g., Frigoríficos, Fogões).
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único numérico.
+        \item \texttt{nome} (VARCHAR): Designação da categoria.
+        \item \texttt{descricao} (TEXT): Nota descritiva sobre a categoria.
+    \end{itemize}
+
+    \item \textbf{Produto (\texttt{produto})}: Contém as especificações técnicas, preço e estado atual de stock de cada eletrodoméstico à venda.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único numérico.
+        \item \texttt{nome} (VARCHAR): Nome comercial do artigo.
+        \item \texttt{marca} (VARCHAR): Marca fabricante.
+        \item \texttt{modelo} (VARCHAR): Modelo de fabrico.
+        \item \texttt{preco} (DECIMAL): Preço unitário em Euros.
+        \item \texttt{stock} (INTEGER): Quantidade física disponível em armazém.
+        \item \texttt{eficiencia\_energetica} (VARCHAR): Classificação energética (e.g., A, B).
+        \item \texttt{categoria\_id} (INTEGER REFERENCES \texttt{categoria}): Chave estrangeira que classifica o produto.
+    \end{itemize}
+
+    \item \textbf{Venda (\texttt{venda})}: Funciona como o "cabeçalho" do documento de venda, registando a transação global efetuada por um cliente.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Número sequencial de fatura.
+        \item \texttt{data\_venda} (TIMESTAMP): Data e hora exatas da transação.
+        \item \texttt{valor\_total} (DECIMAL): Custo final acumulado da compra.
+        \item \texttt{utilizador\_id} (INTEGER REFERENCES \texttt{utilizador}): Chave estrangeira associando a compra a um cliente registado.
+        \item \texttt{metodo\_pagamento}, \texttt{morada}, \texttt{cidade}, \texttt{codigo\_postal}, \texttt{telefone} (VARCHAR): Informações de faturação e entrega fornecidas no checkout.
+    \end{itemize}
+
+    \item \textbf{Item de Venda (\texttt{item\_venda})}: Armazena os detalhes dos produtos contidos em cada venda.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único.
+        \item \texttt{venda\_id} (INTEGER REFERENCES \texttt{venda}): Associação à fatura global.
+        \item \texttt{produto\_id} (INTEGER REFERENCES \texttt{produto}): Produto adquirido.
+        \item \texttt{quantidade} (INTEGER): Unidades compradas.
+        \item \texttt{preco\_unitario} (DECIMAL): Preço unitário praticado na transação (estático, imune a futuras alterações de preço do catálogo).
+    \end{itemize}
+
+    \item \textbf{Reserva (\texttt{reservas})}: Mecanismo essencial para gerir o inventário de forma concorrente em sistemas distribuídos. Evita a ocorrência de "over-selling" e falhas de checkout ao garantir que os artigos no carrinho de compras ficam reservados para o cliente por um período de tempo predefinido (5 minutos).
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único da reserva.
+        \item \texttt{produto\_id} (INTEGER REFERENCES \texttt{produto}): O produto reservado, cuja quantidade é temporariamente subtraída do stock geral.
+        \item \texttt{utilizador\_id} (INTEGER REFERENCES \texttt{utilizador}): Cliente detentor da reserva.
+        \item \texttt{quantidade} (INTEGER): Unidades reservadas.
+        \item \texttt{data\_expiracao} (TIMESTAMP): Limite temporal para concluir o checkout antes de a reserva ser expirada e o stock ser devolvido ao produto.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Esquema Relacional e Mapeamentos JPA}
+As relações entre as entidades são mapeadas através de anotações JPA como \texttt{@ManyToOne}, \texttt{@OneToMany} e \texttt{@OneToOne}, estruturando os dados segundo as regras do PostgreSQL. A tabela~\ref{tab:mapeamentos} resume o mapeamento das relações:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|p{6.5cm}|}
+\hline
+\textbf{Classe Origem} & \textbf{Atributo} & \textbf{Relação JPA} & \textbf{Propagação / Comportamento} \\ \hline
+\texttt{Utilizador} & \texttt{vendas} & \texttt{@OneToMany} & Mapeado por \texttt{utilizador}, com eliminação em cascata (\texttt{CascadeType.ALL}). \\ \hline
+\texttt{Produto} & \texttt{categoria} & \texttt{@ManyToOne} & Chave estrangeira \texttt{categoria\_id}. Permite associar a uma categoria mãe. \\ \hline
+\texttt{Venda} & \texttt{itens} & \texttt{@OneToMany} & Mapeado por \texttt{venda}, com persistência e remoção integral em cascata. \\ \hline
+\texttt{ItemVenda} & \texttt{venda} & \texttt{@ManyToOne} & Ligação direta à venda mãe (\texttt{venda\_id}). \\ \hline
+\texttt{ItemVenda} & \texttt{produto} & \texttt{@ManyToOne} & Ligação ao registo do produto (\texttt{produto\_id}). \\ \hline
+\texttt{Reserva} & \texttt{produto} & \texttt{@ManyToOne} & Relação com o produto reservado. \\ \hline
+\texttt{Reserva} & \texttt{utilizador} & \texttt{@ManyToOne} & Relação com o utilizador detentor da reserva. \\ \hline
+\end{tabular}
+\caption{Mapeamentos Objeto-Relacional (JPA) e Comportamentos em Cascata}
+\label{tab:mapeamentos}
+\end{table}
+
+Este desenho assegura que, no momento de submissão de uma encomenda, a venda e os seus respetivos itens de venda sejam guardados atomicamente numa única transação controlada pelo Spring Boot. Ao mesmo mais elevado nível, o uso de reservas temporárias previne a ocorrência de condições de corrida num cenário concorrente de compras, mantendo a integridade referencial e física de todo o stock do inventário.
 
 \section{Gestão de Catálogo e Vendas}
 [Aqui ficará a descrição das funcionalidades de produtos e compras].
@@ -184,7 +299,13 @@ A comunicação entre as duas camadas é feita através de serviços assíncrono
 [Aqui ficarão os resultados dos testes realizados, capturas de ecrã das funcionalidades a funcionar e validação dos requisitos técnicos.]
 
 \section{Segurança e Autenticação}
-[Aqui ficará a demonstração dos testes de login, registo e proteção de rotas.]
+Para testar a fiabilidade do sistema de segurança concebido, foram conduzidos testes de validação focados em cenários de acesso não autorizado:
+\begin{enumerate}
+    \item \textbf{Verificação de Sessão Ativa:} Ao aceder ao dashboard ou ao catálogo de produtos sem um token de autenticação válido armazenado, o componente \texttt{ProtectedRoute} do React bloqueia imediatamente o carregamento do conteúdo e redireciona o utilizador para a página de \texttt{/login}.
+    \item \textbf{Fluxo de Registo e Login com Sucesso:} Testou-se a criação de um utilizador comum e a autenticação do mesmo. O token JWT foi emitido com sucesso pelo servidor e carregado no cabeçalho HTTP de todos os pedidos assíncronos seguintes.
+    \item \textbf{Validação de Acesso Restrito no Frontend:} Efetuou-se login com um utilizador comum (perfil \texttt{CLIENTE}). Ao tentar forçar o URL de administração no browser (\texttt{http://localhost:5173/admin/produtos}), o componente de segurança barrou o acesso e reencaminhou o utilizador de volta para o dashboard principal.
+    \item \textbf{Teste de Bloqueio de Endpoints no Backend:} Através da simulação direta de pedidos REST HTTP para os endpoints reservados (e.g., pedidos POST para \texttt{/api/produtos} ou \texttt{/api/categorias}) utilizando ferramentas como Postman e enviando um token de utilizador com perfil \texttt{CLIENTE}, a API do Spring Boot respondeu com o estado de erro \textbf{403 Forbidden}, validando com absoluto rigor a eficácia das anotações \texttt{@PreAuthorize("hasRole('ADMIN')")}.
+\end{enumerate}
 
 \section{Gestão de Produtos}
 [Aqui ficará a demonstração das operações CRUD de produtos.]

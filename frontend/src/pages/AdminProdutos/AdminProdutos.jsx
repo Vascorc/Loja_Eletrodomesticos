@@ -124,8 +124,8 @@ const AdminProdutos = () => {
         </div>
 
         <div className="admin-subheader">
-          <button className="btn-secondary" onClick={() => navigate('/admin/vendas')}>
-            Ver todas as vendas
+          <button className="btn-secondary" onClick={() => navigate('/minha-conta')}>
+            Voltar para Minha Conta
           </button>
         </div>
 

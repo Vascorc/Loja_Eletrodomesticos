@@ -5,6 +5,7 @@ import com.trabalho.sd.loja_online.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,23 +48,26 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.listarPorCategoria(categoriaId));
     }
 
-    // POST /api/produtos  (apenas ADMIN — segurança a adicionar pelo colega)
+    // POST /api/produtos  (apenas ADMIN e GESTOR)
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProdutoDTO> criar(@RequestBody ProdutoDTO dto) {
         ProdutoDTO criado = produtoService.criar(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
-    // PUT /api/produtos/{id}  (apenas ADMIN)
+    // PUT /api/produtos/{id}  (apenas ADMIN e GESTOR)
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProdutoDTO> atualizar(
             @PathVariable Long id,
             @RequestBody ProdutoDTO dto) {
         return ResponseEntity.ok(produtoService.atualizar(id, dto));
     }
 
-    // DELETE /api/produtos/{id}  (apenas ADMIN)
+    // DELETE /api/produtos/{id}  (apenas ADMIN e GESTOR)
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
         produtoService.remover(id);
         return ResponseEntity.noContent().build();
@@ -72,6 +76,7 @@ public class ProdutoController {
     // PATCH /api/produtos/{id}/stock?quantidade=5
     // Endpoint para o colega das vendas chamar quando uma venda é concluída
     @PatchMapping("/{id}/stock")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> atualizarStock(
             @PathVariable Long id,
             @RequestParam int quantidade) {

@@ -78,7 +78,7 @@ const Dashboard = () => {
               </div>
             ))
           ) : (
-            <p>Nenhum produto disponível no catálogo no momento.</p>
+            <p>A carregar Produtos...</p>
           )}
         </div>
 

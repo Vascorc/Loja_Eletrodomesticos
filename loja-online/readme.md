@@ -96,5 +96,5 @@ loja-online/
    ```
 3. Execute o projeto usando o Maven Wrapper:
    - Linux/Mac: `./mvnw spring-boot:run`
-   - Windows: `mvnw.cmd spring-boot:run`
+   - Windows: `.\mvnw.cmd spring-boot:run`
 4. A API ficará disponível em `http://localhost:8080`.

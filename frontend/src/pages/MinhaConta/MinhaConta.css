@@ -27,8 +27,15 @@
 
 .account-sections {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
+}
+
+.account-sections.has-admin {
+  grid-template-columns: 2fr 5fr 3fr;
+}
+
+.account-sections.no-admin {
+  grid-template-columns: 3fr 7fr;
 }
 
 .account-card {
@@ -144,6 +151,7 @@
   display: flex;
   gap: 0.4rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .btn-seguir-entrega {
@@ -172,14 +180,17 @@
   width: 6px;
   height: 6px;
 }
+
 .historico-table-wrapper::-webkit-scrollbar-track {
   background: #f1f5f9;
   border-radius: 4px;
 }
+
 .historico-table-wrapper::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
+
 .historico-table-wrapper::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
@@ -207,7 +218,9 @@
     font-size: 1.5rem;
   }
 
-  .account-sections {
+  .account-sections,
+  .account-sections.has-admin,
+  .account-sections.no-admin {
     grid-template-columns: 1fr;
     gap: 1rem;
   }

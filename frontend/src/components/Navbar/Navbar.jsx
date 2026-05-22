@@ -6,6 +6,10 @@ import { useCart } from '../../context/CartContext';
 import './Navbar.css';
 
 
+const removerAcentos = (str) => {
+  return str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+};
+
 const Navbar = () => {
   const user = AuthService.getCurrentUser();
   const { cart, cartTotal, setIsCartOpen } = useCart();
@@ -36,7 +40,7 @@ const Navbar = () => {
     setNavSearchTerm(valor);
     if (valor.trim().length >= 2) {
       const filtrados = produtos
-        .filter(p => (p.nome || '').toLowerCase().includes(valor.toLowerCase()))
+        .filter(p => removerAcentos(p.nome).includes(removerAcentos(valor)))
         .slice(0, 6);
       setSugestoes(filtrados);
       setShowSugestoes(filtrados.length > 0);

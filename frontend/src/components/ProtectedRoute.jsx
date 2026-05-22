@@ -9,9 +9,12 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (requiredRole && user.perfil !== requiredRole) {
-    // Redireciona para o dashboard se não tiver o cargo necessário
-    return <Navigate to="/" replace />;
+  if (requiredRole) {
+    const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+    if (!allowedRoles.includes(user.perfil)) {
+      // Redireciona para o dashboard se não tiver o cargo necessário
+      return <Navigate to="/" replace />;
+    }
   }
 
   return children;

@@ -12,6 +12,10 @@ const EFICIENCIA_COR = {
 };
 
 
+const removerAcentos = (str) => {
+  return str ? str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+};
+
 const CatalogoPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get('q') || '';
@@ -50,7 +54,7 @@ const CatalogoPage = () => {
   }, [queryParam, categoryParam]);
 
   const produtosFiltrados = produtos.filter(p => {
-    const matchNome = pesquisa === '' || (p.nome || '').toLowerCase().includes(pesquisa.toLowerCase());
+    const matchNome = pesquisa === '' || removerAcentos(p.nome).includes(removerAcentos(pesquisa));
     const matchCat = categoriaAtiva === null || p.categoriaId === categoriaAtiva;
     return matchNome && matchCat;
   });

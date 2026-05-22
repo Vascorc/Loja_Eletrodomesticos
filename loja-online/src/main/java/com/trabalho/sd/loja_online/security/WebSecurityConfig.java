@@ -71,9 +71,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/test/**").permitAll()
                         .requestMatchers("/api/produtos/public/**").permitAll()
-                        .requestMatchers("/api/categorias/**").permitAll()
-                        .anyRequest().authenticated()
-                );
+                        
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/categorias/**").permitAll()
+                        .anyRequest().authenticated());
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
