@@ -122,6 +122,18 @@
   color: var(--white);
 }
 
+.cat-pill-destaque.active {
+  background-color: #D97706;
+  border-color: #D97706;
+  color: var(--white);
+}
+
+.cat-pill-destaque:not(.active):hover {
+  border-color: #D97706;
+  color: #D97706;
+}
+
+
 .cat-count {
   background: rgba(255, 255, 255, 0.25);
   border-radius: 50px;

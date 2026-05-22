@@ -107,6 +107,36 @@
     line-height: 1.6;
 }
 
+.btn-ver-catalogo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    letter-spacing: 0.01em;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn-ver-catalogo:hover {
+    background: linear-gradient(135deg, #1D4ED8 0%, #1E3A8A 100%);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    transform: translateY(-1px);
+}
+
+.btn-ver-catalogo:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
 .carrinho-items {
     display: flex;
     flex-direction: column;

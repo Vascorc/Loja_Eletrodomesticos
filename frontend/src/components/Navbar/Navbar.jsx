@@ -1,17 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthService from '../../services/auth.service';
-import { produtoService } from '../../services/produtoService';
+import { produtoService, categoriaService } from '../../services/produtoService';
 import { useCart } from '../../context/CartContext';
 import './Navbar.css';
 
-const CATEGORIAS_FIXAS = [
-  { id: 1, nome: 'Grandes Eletrodomésticos' },
-  { id: 2, nome: 'Televisores' },
-  { id: 3, nome: 'Informática' },
-  { id: 4, nome: 'Pequenos Eletrodomésticos' },
-  { id: 5, nome: 'Promoções do Dia' },
-];
 
 const Navbar = () => {
   const user = AuthService.getCurrentUser();
@@ -21,13 +14,13 @@ const Navbar = () => {
   const [sugestoes, setSugestoes] = useState([]);
   const [showSugestoes, setShowSugestoes] = useState(false);
   const [produtos, setProdutos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
   const searchRef = useRef(null);
 
   useEffect(() => {
-    produtoService.listarTodos()
-      .then(setProdutos)
-      .catch(() => {});
+    produtoService.listarTodos().then(setProdutos).catch(() => {});
+    categoriaService.listarTodas().then(setCategorias).catch(() => {});
 
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -101,7 +94,11 @@ const Navbar = () => {
             onFocus={() => sugestoes.length > 0 && setShowSugestoes(true)}
             autoComplete="off"
           />
-          <button type="submit" className="search-btn">🔍</button>
+          <button type="submit" className="search-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
 
           {showSugestoes && (
             <ul className="autocomplete-dropdown">
@@ -118,7 +115,10 @@ const Navbar = () => {
                 </li>
               ))}
               <li className="autocomplete-ver-todos" onMouseDown={handleNavSearch}>
-                🔍 Ver todos os resultados para "<strong>{navSearchTerm}</strong>"
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink: 0}}>
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                Ver todos os resultados para "<strong>{navSearchTerm}</strong>"
               </li>
             </ul>
           )}
@@ -142,15 +142,21 @@ const Navbar = () => {
       </div>
 
       <div className={`nav-bottom ${menuOpen ? 'nav-bottom-open' : ''}`}>
-        <span onClick={() => { navigate('/catalogo'); setMenuOpen(false); }} style={{ cursor: 'pointer' }}>Todas as Categorias</span>
-        {CATEGORIAS_FIXAS.map(cat => (
-          <span
+        <button className="nav-cat-item nav-cat-all" onClick={() => { navigate('/catalogo'); setMenuOpen(false); }}>
+          Todos os Produtos
+        </button>
+        <button className="nav-cat-item nav-cat-destaque" onClick={() => { navigate('/catalogo?destaque=true'); setMenuOpen(false); }}>
+          Em Destaque
+        </button>
+        <span className="nav-cat-divider" />
+        {categorias.map(cat => (
+          <button
             key={cat.id}
+            className="nav-cat-item"
             onClick={() => { navigate(`/catalogo?cat=${cat.id}`); setMenuOpen(false); }}
-            style={{ cursor: 'pointer' }}
           >
             {cat.nome}
-          </span>
+          </button>
         ))}
       </div>
     </nav>

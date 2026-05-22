@@ -44,7 +44,10 @@ const Carrinho = () => {
                             <div className="empty-cart-icon">🛒</div>
                             <h3>Sem artigos no carrinho</h3>
                             <p>Escolha um produto e adicione ao carrinho para continuar.</p>
-                            <button onClick={() => { setIsCartOpen(false); navigate('/catalogo'); }} className="btn-primary">Ver Produtos</button>
+                            <button onClick={() => { setIsCartOpen(false); navigate('/catalogo'); }} className="btn-ver-catalogo">
+                                
+                                Explorar Catálogo
+                            </button>
                         </div>
                     </div>
                 </div>

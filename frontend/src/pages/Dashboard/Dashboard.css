@@ -26,6 +26,24 @@
   margin-bottom: 1rem;
 }
 
+.btn-ver-todos-hero {
+  display: inline-block;
+  margin-top: 1.25rem;
+  padding: 0.7rem 1.75rem;
+  background: white;
+  color: #1E3A8A;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-ver-todos-hero:hover {
+  background: #e0e7ff;
+  transform: translateY(-1px);
+}
+
 /* Grid de Produtos (Placeholder) */
 .section-title {
   display: flex;

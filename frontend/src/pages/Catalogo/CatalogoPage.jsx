@@ -16,7 +16,8 @@ const CatalogoPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParam = searchParams.get('q') || '';
   const categoryParam = searchParams.get('cat');
-  
+  const destaqueParam = searchParams.get('destaque') === 'true';
+
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [pesquisa, setPesquisa] = useState(queryParam);
@@ -30,14 +31,18 @@ const CatalogoPage = () => {
 
   useEffect(() => {
     setUser(AuthService.getCurrentUser());
-    Promise.all([produtoService.listarTodos(), categoriaService.listarTodas()])
+    const carregarProdutos = destaqueParam
+      ? produtoService.maisVendidos()
+      : produtoService.listarTodos();
+
+    Promise.all([carregarProdutos, categoriaService.listarTodas()])
       .then(([prods, cats]) => {
         setProdutos(prods);
         setCategorias(cats);
       })
       .catch(() => setErro('Erro ao carregar o catálogo. Verifique se o servidor está ativo.'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [destaqueParam]);
 
   useEffect(() => {
     setPesquisa(queryParam);
@@ -58,11 +63,18 @@ const CatalogoPage = () => {
 
   const handleCategoriaChange = (id) => {
     const newParams = new URLSearchParams(searchParams);
+    newParams.delete('destaque');
     if (id === null) {
       newParams.delete('cat');
     } else {
       newParams.set('cat', id.toString());
     }
+    setSearchParams(newParams);
+  };
+
+  const handleDestaqueClick = () => {
+    const newParams = new URLSearchParams();
+    newParams.set('destaque', 'true');
     setSearchParams(newParams);
   };
 
@@ -77,7 +89,11 @@ const CatalogoPage = () => {
             {produtosFiltrados.length} produto{produtosFiltrados.length !== 1 ? 's' : ''} encontrado{produtosFiltrados.length !== 1 ? 's' : ''}
           </p>
           <div className="search-bar">
-            <span className="search-icon">&#128269;</span>
+            <span className="search-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+            </span>
             <input
               type="text"
               placeholder="Pesquisar produto..."
@@ -92,15 +108,21 @@ const CatalogoPage = () => {
 
         <div className="categorias-filtro">
           <button
-            className={`cat-pill ${categoriaAtiva === null ? 'active' : ''}`}
+            className={`cat-pill ${!destaqueParam && categoriaAtiva === null ? 'active' : ''}`}
             onClick={() => handleCategoriaChange(null)}
           >
             Todos
           </button>
+          <button
+            className={`cat-pill cat-pill-destaque ${destaqueParam ? 'active' : ''}`}
+            onClick={handleDestaqueClick}
+          >
+            ⭐ Em Destaque
+          </button>
           {categorias.map(cat => (
             <button
               key={cat.id}
-              className={`cat-pill ${categoriaAtiva === cat.id ? 'active' : ''}`}
+              className={`cat-pill ${!destaqueParam && categoriaAtiva === cat.id ? 'active' : ''}`}
               onClick={() => handleCategoriaChange(cat.id)}
             >
               {cat.nome}

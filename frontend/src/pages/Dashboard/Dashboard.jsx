@@ -51,11 +51,12 @@ const Dashboard = () => {
         <section className="hero-banner">
           <h1>Bem-vindo à ELECTRO-SD</h1>
           <p>Os melhores eletrodomésticos com as melhores tecnologias de Sistemas Distribuídos.</p>
+          <Link to="/catalogo" className="btn-ver-todos-hero">Ver Todos os Produtos</Link>
         </section>
 
         <div className="section-title">
           <h2>Produtos em Destaque</h2>
-          <Link to="/catalogo" style={{ color: '#2563EB', fontWeight: '600', textDecoration: 'none' }}>Ver todos</Link>
+          <Link to="/catalogo?destaque=true" style={{ color: '#2563EB', fontWeight: '600', textDecoration: 'none' }}>Ver todos</Link>
         </div>
 
         <div className="products-grid">
