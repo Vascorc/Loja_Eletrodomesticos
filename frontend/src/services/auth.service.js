@@ -17,7 +17,8 @@ class AuthService {
 
     const data = await response.json();
     if (data.token) {
-      localStorage.setItem("user", JSON.stringify(data));
+      const { perfil, ...userData } = data;
+      localStorage.setItem("user", JSON.stringify(userData));
     }
     return data;
   }

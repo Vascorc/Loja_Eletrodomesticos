@@ -232,7 +232,7 @@ const Entregas = () => {
                   <div className="eta-info-box">
                     {tracking.isDelivered ? (
                       <p className="eta-delivered-msg">
-                        🎉 <strong>Entregue!</strong> O seu pedido foi entregue com sucesso em <strong>{expectedDate.toLocaleDateString()}</strong> às <strong>{expectedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</strong>.
+                        <strong>Entregue!</strong> O seu pedido foi entregue com sucesso em <strong>{expectedDate.toLocaleDateString()}</strong> às <strong>{expectedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</strong>.
                       </p>
                     ) : (
                       <div className="eta-countdown-wrapper">

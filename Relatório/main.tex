@@ -10,8 +10,10 @@
 \usepackage{titlesec}
 \usepackage{setspace}
 \usepackage{tikz}
+\usetikzlibrary{shapes.multipart, positioning}
 \usepackage{xcolor}
 \usepackage{listings}
+\usepackage{booktabs}
 
 \lstset{
   language=Java,
@@ -60,36 +62,47 @@
 
 \chapter*{Acrónimos}
 \begin{description}
-    \item[TCP] Transmission Control Protocol
-    \item[IP] Internet Protocol
-    \item[UBI] Universidade da Beira Interior
-    \item[UDP] User Datagram Protocol
+    \item[ACID] Atomicity, Consistency, Isolation, Durability (Atomicidade, Consistência, Isolamento e Durabilidade)
+    \item[API] Application Programming Interface (Interface de Programação de Aplicações)
+    \item[BD] Base de Dados
+    \item[CRUD] Create, Read, Update, Delete (Criação, Consulta, Atualização e Eliminação)
+    \item[HTTP] Hypertext Transfer Protocol (Protocolo de Transferência de Hipertexto)
+    \item[JPA] Java Persistence API (API de Persistência Java)
+    \item[JWT] JSON Web Tokens
+    \item[ORM] Object-Relational Mapping (Mapeamento Objeto-Relacional)
+    \item[REST] Representational State Transfer
+    \item[SGBD] Sistema de Gestão de Base de Dados
+    \item[SQL] Structured Query Language (Linguagem de Consulta Estruturada)
+    \item[URL] Uniform Resource Locator (Localizador de Recursos Uniforme)
 \end{description}
 
 \chapter*{Glossário}
 \begin{description}
-    \item[Socket] Ponto final de uma ligação de comunicação bidirecional entre dois programas através de uma rede de dados.
-    \item[Thread] Linha de execução independente e secundária dentro de um processo principal, permitindo a concorrência computacional.
+    \item[Middleware] Componente lógico intermédio (como filtros de segurança) que interceta pedidos HTTP para realizar validações antes de chegarem aos controladores.
+    \item[Pessimistic Locking] Estratégia de controlo de concorrência que bloqueia registos na base de dados durante uma transação para evitar condições de corrida.
+    \item[Stateless] Estilo de arquitetura onde o servidor não mantém qualquer estado de sessão do utilizador, sendo cada pedido autossuficiente para validação.
+    \item[Thread] Linha de execução independente dentro de um processo, permitindo realizar tarefas de forma concorrente no backend.
 \end{description}
+
 
 \chapter{Introdução}
 
 \section{Enquadramento}
-No âmbito da unidade curricular de Sistemas Distribuídos, foi proposto o desenvolvimento de uma aplicação web completa para uma loja online. O tema escolhido pelo grupo foi uma \textbf{Loja de Eletrodomésticos}, implementada recorrendo à framework Spring para o backend e tecnologias web modernas para o frontend.
+No âmbito da unidade curricular de Sistemas Distribuídos, foi proposto o desenvolvimento de uma aplicação web completa para uma loja online. O tema escolhido pelo grupo foi uma \textbf{Loja de Eletrodomésticos}, implementada recorrendo à framework Spring para o backend e React para o frontend.
 
 Este projeto foca-se na criação de serviços RESTful, persistência de dados e, crucialmente, na segurança e gestão de sessões de utilizadores num ambiente distribuído. Todo o código-fonte pode ser consultado no repositório GitHub do projeto através do endereço \url{https://github.com/Vascorc/Loja_Eletrodomesticos}.
 
 \section{Objetivos}
-O objetivo principal é conceber uma plataforma robusta que permita a gestão de um catálogo de produtos, a realização de compras por clientes registados e a administração de stocks.
+O objetivo principal é desenvolver uma plataforma que permita a gestão de um catálogo de produtos, a realização de compras por clientes registados e a administração de stocks.
 
 Os objetivos específicos incluem:
 \begin{enumerate}
     \item Implementação de uma API RESTful utilizando Spring Boot.
     \item Persistência de dados num SGBD relacional (PostgreSQL).
-    \item \textbf{Implementação de um sistema de segurança robusto com autenticação JWT (JSON Web Tokens).}
+    \item Implementação de um sistema de segurança robusto com autenticação JWT (JSON Web Tokens).
     \item Gestão de sessões stateless para garantir escalabilidade.
     \item Integração do Frontend com o Backend através de serviços assíncronos.
-    \item Desenvolvimento de lógica distribuída para processamento de vendas, faturas e controle de stocks concorrente.
+    \item Desenvolvimento de lógica distribuída para processamento de vendas, faturas e controlo de stocks concorrente.
 \end{enumerate}
 
 \section{Organização do Documento}
@@ -97,26 +110,218 @@ Para descrever de forma clara os procedimentos, este documento está organizado 
 \begin{itemize}
     \item \textbf{Capítulo 1 -- Introdução} -- apresenta de forma geral o tema e os objetivos do projeto.
     \item \textbf{Capítulo 2 -- Tecnologias e Ferramentas Utilizadas} -- descreve a stack tecnológica adotada para o desenvolvimento do sistema.
-    \item \textbf{Capítulo 3 -- Implementação} -- explica em pormenor as decisões de arquitetura, o modelo de segurança e as funcionalidades da loja online.
-    \item \textbf{Capítulo 4 -- Testes e Validação do Sistema} -- detalha os testes práticos efetuados para validar o correto funcionamento de cada funcionalidade.
-    \item \textbf{Capítulo 5 -- Conclusões e Trabalho Futuro} -- sintetiza o trabalho executado e delineia possíveis melhorias futuras.
+    \item \textbf{Capítulo 3 -- Modelo de Dados} -- detalha o desenho da base de dados relacional (PostgreSQL), diagramas entidade-relação, as entidades JPA e as políticas de propagação em cascata.
+    \item \textbf{Capítulo 4 -- Arquitetura e Implementação do Sistema} -- explica em pormenor as decisões de arquitetura, o modelo de segurança com JWT, a integração frontend-backend e a lógica de concorrência e reservas de stock.
+    \item \textbf{Capítulo 5 -- Testes e Validação do Sistema} -- detalha os testes práticos efetuados para validar o correto funcionamento de cada funcionalidade e as verificações de segurança.
+    \item \textbf{Capítulo 6 -- Conclusões e Trabalho Futuro} -- sintetiza o trabalho executado e delineia possíveis melhorias futuras.
 \end{itemize}
 
 
 \chapter{Tecnologias e Ferramentas Utilizadas}
 
 \section{Spring Framework e Spring Security}
-O backend foi desenvolvido com Spring Boot, utilizando o ecossistema Spring Security para gerir a autenticação e autorização. Esta escolha permitiu uma integração simplificada de mecanismos de segurança avançados, como a proteção contra ataques CSRF (mesmo estando desativada para APIs stateless) e a gestão de contextos de segurança por thread.
+O backend foi desenvolvido com Spring Boot, utilizando o ecossistema Spring Security para gerir a autenticação e autorização. Esta escolha permitiu uma integração simplificada de mecanismos de segurança avançados.
 
 \section{JSON Web Tokens (JWT)}
-Para a gestão de sessões, optou-se por JWT. Esta tecnologia permite que o servidor não necessite de guardar estado (stateless), o que é ideal para sistemas distribuídos, pois o token enviado pelo cliente contém toda a informação necessária para a sua identificação, permitindo que a API escale horizontalmente sem necessidade de partilhar sessões entre instâncias.
+Para a gestão de sessões, optou-se por JWT. Esta tecnologia permite que o servidor não necessite de guardar estado (stateless), o que é ideal para sistemas distribuídos, pois o token enviado pelo cliente contém toda a informação necessária para a sua identificação, permitindo que a API escale sem necessidade de partilhar sessões entre instâncias.
 
 \section{PostgreSQL}
-A persistência de dados é assegurada pelo PostgreSQL, um SGBD relacional robusto que garante a integridade dos dados de utilizadores, produtos e vendas através de transações ACID.
+A persistência de dados é assegurada pelo PostgreSQL, um SGBD relacional robusto que garante a integridade dos dados de utilizadores, produtos e vendas.
 
 \section{React e Vite}
-O frontend foi construído utilizando React, uma biblioteca JavaScript para a criação de interfaces de utilizador dinâmicas. O ambiente de desenvolvimento Vite foi escolhido pela sua velocidade e suporte nativo a módulos ES.
-\chapter{Implementação}
+O frontend foi construído utilizando React, uma biblioteca JavaScript para a criação de interfaces de utilizador dinâmicas.
+
+\chapter{Modelo de Dados}
+
+O modelo de dados da aplicação foi projetado para suportar todas as operações de e-commerce, o controlo transacional de inventário e o sistema de segurança stateless. A persistência é gerida através da especificação JPA (Java Persistence API) com o Hibernate como fornecedor ORM subjacente, mapeando classes Java diretamente para tabelas na base de dados relacional PostgreSQL.
+
+\section{Descrição das Entidades}
+O modelo é constituído por 6 entidades principais, cujos propósitos e estruturas são descritos detalhadamente a seguir:
+\begin{enumerate}
+    \item \textbf{Utilizador (\texttt{utilizador})}: Armazena os dados cadastrais e as credenciais de segurança de clientes e administradores.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único numérico gerado automaticamente.
+        \item \texttt{nome} (VARCHAR): Nome completo do utilizador.
+        \item \texttt{email} (VARCHAR, UNIQUE): Endereço de correio eletrónico, usado como credencial única de login.
+        \item \texttt{password} (VARCHAR): Hash de palavra-passe encriptada usando BCrypt.
+        \item \texttt{perfil} (VARCHAR): Nível de privilégio do utilizador (\texttt{CLIENTE} ou \texttt{ADMIN}).
+    \end{itemize}
+
+    \item \textbf{Categoria (\texttt{categoria})}: Modela as categorias ou famílias de eletrodomésticos (e.g., Frigoríficos, Fogões).
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único da categoria.
+        \item \texttt{nome} (VARCHAR, UNIQUE): Designação única da categoria.
+        \item \texttt{descricao} (TEXT): Detalhes adicionais sobre a categoria.
+    \end{itemize}
+
+    \item \textbf{Produto (\texttt{produto})}: Contém as especificações técnicas, preço, imagem e estado de stock de cada eletrodoméstico à venda.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único numérico do artigo.
+        \item \texttt{nome} (VARCHAR): Nome comercial do artigo.
+        \item \texttt{marca} (VARCHAR), \texttt{modelo} (VARCHAR): Marca e modelo do fabricante.
+        \item \texttt{preco} (DECIMAL): Preço unitário em Euros.
+        \item \texttt{stock} (INTEGER): Quantidade física disponível em armazém.
+        \item \texttt{eficiencia\_energetica} (VARCHAR): Classificação de consumo energético (e.g., A, B).
+        \item \texttt{imagem\_url} (VARCHAR): Link ou URL da imagem do produto.
+        \item \texttt{categoria\_id} (INTEGER REFERENCES \texttt{categoria}): Chave estrangeira que classifica o produto.
+    \end{itemize}
+
+    \item \textbf{Venda (\texttt{venda})}: Regista a transação global efetuada por um cliente, funcionando como cabeçalho de faturação.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Número sequencial da venda/fatura única.
+        \item \texttt{data\_venda} (TIMESTAMP): Data e hora exatas da conclusão da compra.
+        \item \texttt{valor\_total} (DECIMAL): Custo final acumulado dos produtos adquiridos.
+        \item \texttt{utilizador\_id} (INTEGER REFERENCES \texttt{utilizador}): Chave estrangeira que associa a compra a um cliente registado.
+        \item \texttt{metodo\_pagamento} (VARCHAR): Método escolhido (ex: PayPal, Cartão).
+        \item \texttt{morada}, \texttt{cidade}, \texttt{codigo\_postal}, \texttt{telefone} (VARCHAR): Dados de faturação e entrega fornecidos no checkout.
+    \end{itemize}
+
+    \item \textbf{Item de Venda (\texttt{item\_venda})}: Armazena os detalhes dos produtos contidos em cada venda.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único da linha de faturação.
+        \item \texttt{venda\_id} (INTEGER REFERENCES \texttt{venda}): Associação à fatura global.
+        \item \texttt{produto\_id} (INTEGER REFERENCES \texttt{produto}): Produto adquirido.
+        \item \texttt{quantidade} (INTEGER): Unidades compradas.
+        \item \texttt{preco\_unitario} (DECIMAL): Preço unitário praticado na transação (estático, salvaguardando alterações de preço posteriores).
+    \end{itemize}
+
+    \item \textbf{Reserva (\texttt{reservas})}: Mecanismo de concorrência distribuída que impede o over-selling na base de dados distribuída, cativando temporariamente os artigos por 5 minutos no carrinho do utilizador.
+    \begin{itemize}
+        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único da reserva.
+        \item \texttt{produto\_id} (INTEGER REFERENCES \texttt{produto}): Produto alocado.
+        \item \texttt{utilizador\_id} (INTEGER REFERENCES \texttt{utilizador}): Utilizador que efetuou a reserva.
+        \item \texttt{quantidade} (INTEGER): Unidades reservadas.
+        \item \texttt{data\_expiracao} (TIMESTAMP): Data limite para fecho da compra antes de o stock retornar ao catálogo geral.
+    \end{itemize}
+\end{enumerate}
+
+\section{Diagrama Entidade-Relação (ERD)}
+A Figura~\ref{fig:erd} descreve graficamente a estrutura das tabelas da base de dados PostgreSQL e os seus relacionamentos lógicos (chaves primárias, chaves estrangeiras e integridade referencial).
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    node distance=1.2cm and 1.8cm,
+    every node/.style={font=\footnotesize},
+    table/.style={
+        draw=black,
+        thick,
+        rectangle split,
+        rectangle split parts=2,
+        rounded corners=2pt,
+        align=left,
+        fill=gray!5,
+        minimum width=4.0cm
+    }
+]
+
+% Coluna 1 (Esquerda)
+\node[table] (utilizador) {
+    \textbf{utilizador}
+    \nodepart{second}
+    \underline{id} : SERIAL (PK)\\
+    nome : VARCHAR\\
+    email : VARCHAR (UQ)\\
+    password : VARCHAR\\
+    perfil : VARCHAR
+};
+
+\node[table, below=2.0cm of utilizador] (reservas) {
+    \textbf{reservas}
+    \nodepart{second}
+    \underline{id} : SERIAL (PK)\\
+    produto\_id : INT (FK)\\
+    utilizador\_id : INT (FK)\\
+    quantidade : INT\\
+    data\_expiracao : TIMESTAMP
+};
+
+% Coluna 2 (Centro)
+\node[table, right=2.2cm of utilizador, yshift=-2.2cm] (produto) {
+    \textbf{produto}
+    \nodepart{second}
+    \underline{id} : SERIAL (PK)\\
+    nome : VARCHAR\\
+    marca : VARCHAR\\
+    modelo : VARCHAR\\
+    preco : DECIMAL\\
+    stock : INT\\
+    eficiencia\_energetica : VARCHAR\\
+    imagem\_url : VARCHAR\\
+    categoria\_id : INT (FK)
+};
+
+\node[table, below=1.5cm of produto] (categoria) {
+    \textbf{categoria}
+    \nodepart{second}
+    \underline{id} : SERIAL (PK)\\
+    nome : VARCHAR\\
+    descricao : TEXT
+};
+
+% Coluna 3 (Direita)
+\node[table, right=7.5cm of utilizador] (venda) {
+    \textbf{venda}
+    \nodepart{second}
+    \underline{id} : SERIAL (PK)\\
+    data\_venda : TIMESTAMP\\
+    valor\_total : DECIMAL\\
+    utilizador\_id : INT (FK)\\
+    metodo\_pagamento : VARCHAR\\
+    morada : VARCHAR\\
+    cidade : VARCHAR\\
+    codigo\_postal : VARCHAR\\
+    telefone : VARCHAR
+};
+
+\node[table, below=2.5cm of venda] (item_venda) {
+    \textbf{item\_venda}
+    \nodepart{second}
+    \underline{id} : SERIAL (PK)\\
+    venda\_id : INT (FK)\\
+    produto\_id : INT (FK)\\
+    quantidade : INT\\
+    preco\_unitario : DECIMAL
+};
+
+% Conexões (Relacionamentos)
+\draw[->, >=stealth, thick] (venda.west) -- (utilizador.east);
+\draw[->, >=stealth, thick] (item_venda.north) -- (venda.south);
+\draw[->, >=stealth, thick] (item_venda.west) -- (produto.east);
+\draw[->, >=stealth, thick] (produto.south) -- (categoria.north);
+\draw[->, >=stealth, thick] (reservas.east) -- (produto.west);
+\draw[->, >=stealth, thick] (reservas.north) -- (utilizador.south);
+
+\end{tikzpicture}
+\caption{Diagrama Entidade-Relação (ERD) das Tabelas do Sistema}
+\label{fig:erd}
+\end{figure}
+
+\section{Esquema Relacional e Mapeamentos JPA}
+As relações entre as entidades são mapeadas através de anotações JPA como \texttt{@ManyToOne}, \texttt{@OneToMany} e \texttt{@OneToOne}, estruturando os dados segundo as regras do PostgreSQL. A Tabela~\ref{tab:mapeamentos} resume o mapeamento das relações:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{lllp{6.5cm}}
+\toprule
+\textbf{Classe Origem} & \textbf{Atributo} & \textbf{Relação JPA} & \textbf{Propagação / Comportamento} \\ \midrule
+\texttt{Utilizador} & \texttt{vendas} & \texttt{@OneToMany} & Mapeado por \texttt{utilizador}, com eliminação em cascata (\texttt{CascadeType.ALL}). \\
+\texttt{Produto} & \texttt{categoria} & \texttt{@ManyToOne} & Chave estrangeira \texttt{categoria\_id}. Permite associar a uma categoria mãe. \\
+\texttt{Venda} & \texttt{itens} & \texttt{@OneToMany} & Mapeado por \texttt{venda}, com persistência e remoção integral em cascata. \\
+\texttt{ItemVenda} & \texttt{venda} & \texttt{@ManyToOne} & Ligação direta à venda mãe (\texttt{venda\_id}). \\
+\texttt{ItemVenda} & \texttt{produto} & \texttt{@ManyToOne} & Ligação ao registo do produto (\texttt{produto\_id}). \\
+\texttt{Reserva} & \texttt{produto} & \texttt{@ManyToOne} & Relação com o produto reservado. \\
+\texttt{Reserva} & \texttt{utilizador} & \texttt{@ManyToOne} & Relação com o utilizador detentor da reserva. \\ \bottomrule
+\end{tabular}
+\caption{Mapeamentos Objeto-Relacional (JPA) e Comportamentos em Cascata}
+\label{tab:mapeamentos}
+\end{table}
+
+Este desenho assegura que, no momento de submissão de uma encomenda, a venda e os seus respetivos itens de venda sejam guardados atomicamente numa única transação controlada pelo Spring Boot. Ao mesmo mais elevado nível, o uso de reservas temporárias previne a ocorrência de condições de corrida num cenário concorrente de compras, mantendo a integridade referencial e física de todo o stock do inventário.
+
+
+
+\chapter{Arquitetura e Implementação do Sistema}
 
 \section{Arquitetura de Segurança}
 A segurança da aplicação foi desenhada de raiz para proteger de forma robusta e consistente os dados dos utilizadores, bem como controlar o acesso a recursos sensíveis. A implementação garante a integridade de todas as rotas do frontend e endpoints REST do backend, organizando as tarefas de segurança nos seguintes eixos fundamentais:
@@ -201,102 +406,78 @@ Para robustecer a segurança contra dados inválidos e vulnerabilidades comuns d
 \section{Integração Frontend-Backend}
 A comunicação entre as duas camadas é feita através de serviços assíncronos no frontend. Criou-se um \texttt{AuthService} em JavaScript que utiliza a API \textit{fetch} para consumir os endpoints REST do backend. O token recebido é armazenado no \texttt{localStorage} para persistência da sessão no browser.
 
-\section{Modelo de Dados}
-O modelo de dados da aplicação foi projetado para suportar todas as operações de e-commerce, o controlo transacional de inventário e o sistema de segurança stateless de forma normalizada e coerente. A persistência é gerida através da especificação JPA (Java Persistence API) com o Hibernate como fornecedor ORM subjacente, mapeando classes Java diretamente para tabelas na base de dados PostgreSQL.
+\section{Gestão de Catálogo e Vendas}
+A gestão do catálogo e o processamento de vendas formam o verdadeiro coração da aplicação. Na prática, o sistema divide-se em duas grandes dinâmicas que trabalham em conjunto: a manutenção contínua dos produtos e todo o ciclo de vida que acompanha uma venda.
 
-O modelo é constituído por 6 entidades principais, cujos propósitos e estruturas são descritos detalhadamente a seguir:
+\subsection{Gestão de Catálogo}
 
-\subsection{Descrição das Entidades}
+Para dar vida ao catálogo, assentamos a lógica nos serviços \texttt{ProdutoService} e \texttt{CategoriaService}, que garantem o ciclo completo de operações CRUD. O utilizador pode explorar os produtos de forma simples, seja navegando pela listagem global, aplicando filtros por categorias ou fazendo pesquisas diretas pelo nome. 
+
+Há também uma funcionalidade inteligente de destaques: o sistema cruza os dados atuais com o histórico de vendas para calcular e expor automaticamente os 5 produtos mais populares do momento. 
+
+Para proteger a arquitetura do sistema, a comunicação entre o \textit{backend} e o \textit{frontend} nunca expõe o modelo de domínio interno de forma direta. Em vez disso, utilizamos DTOs (\textit{Data Transfer Objects}), como o \texttt{ProdutoDTO}, que servem como uma camada segura de isolamento.
+
+\subsection{Gestão de Vendas (Carrinho e Checkout)}
+
+A experiência de compra começa quando o utilizador adiciona um artigo ao carrinho, disparando de imediato um mecanismo de reserva temporária de stock. Quando decide avançar para o \textit{checkout}, o sistema recolhe os dados de envio e pagamento através do \texttt{CheckoutRequestDTO} e submete-os para processamento.
+
+É neste momento que o \textit{backend} assume o controlo através de um fluxo estruturado:
+\begin{itemize}
+    \item Percorre detalhadamente cada um dos itens guardados no carrinho;
+    \item Calcula o valor total finalizado do pedido;
+    \item Gera e persiste as respetivas entidades de \texttt{Venda} e \texttt{ItemVenda}.
+\end{itemize}
+
+Assim que a transação é concluída com sucesso, a venda fica imediatamente vinculada ao perfil do \texttt{Utilizador} autenticado. O registo passa a estar disponível para consulta no seu histórico pessoal de compras e na área de faturação.
+
+\section{Lógica de Negócio e Serviços}
+A arquitetura do backend foi desenhado seguindo um modelo de camadas focado no domínio. Toda a lógica de negócio fica estritamente isolada na camada de serviços --- identificados pela anotação \code{@Service} do Spring Boot. Esta abordagem garante uma separação clara de responsabilidades, evitando que as regras de processamento se misturem com os controladores REST ou com a persistência de dados nos repositórios.
+
+A dinâmica de compras e vendas assenta em três pilares principais:
+
+\subsection*{ProdutoService} 
+Centraliza toda a gestão e validação dos produtos. É responsável por verificar a existência de categorias associadas durante os processos de criação ou atualização, garantindo também uma conversão precisa e segura entre as entidades da base de dados e os DTOs.
+
+\subsection*{VendaService} 
+Orquestra o fluxo crítico de finalização de compra. O método de \textit{checkout} opera sob um contexto transacional (\code{@Transactional}), validando a identidade do utilizador antes de construir a entidade de venda. A partir daí, percorre os itens do pedido para delegar a verificação de disponibilidade física e a respetiva retenção de stock. Adicionalmente, este componente gere o histórico de compras dos clientes --- aplicando os filtros de segurança necessários --- e disponibiliza uma visão consolidada das vendas para o perfil de administrador.
+
+\subsection*{ReservaService} 
+Controla o ciclo de vida temporal do carrinho de compras. Assim que um produto é reservado, o sistema deduz temporariamente essa quantidade do stock por um período de 5 minutos. Para melhorar a experiência do utilizador e evitar frustrações, o sistema renova automaticamente o prazo de expiração de todas as reservas ativas daquele perfil sempre que um novo item é adicionado ao carrinho.
+
+
+\section{Processamento de Vendas e Stocks}
+Para evitar que múltiplos utilizadores comprem o mesmo produto em simultâneo, o sistema utiliza uma estratégia dupla de sincronização: bloqueios imediatos na base de dados e um circuito de reservas temporárias.
+
+\paragraph{Isolamento de Concorrência e Abordagem Comparativa (JVM vs. Base de Dados):}
+Para justificar o desenho do sistema no âmbito de Sistemas Distribuídos, analisou-se detalhadamente a estratégia de exclusão mútua no acesso concorrente ao stock, avaliando duas hipóteses principais:
 \begin{enumerate}
-    \item \textbf{Utilizador (\texttt{utilizador})}: Armazena os dados cadastrais e as credenciais de segurança de clientes e administradores.
+    \item \textbf{Sincronização em Memória (\texttt{synchronized} na JVM):} A utilização de monitores e blocos declarados como \texttt{synchronized} em Java é uma solução clássica para exclusão mútua ao nível de \textit{threads} a correr localmente numa única máquina virtual. No entanto, esta hipótese apresenta duas limitações graves para o projeto:
     \begin{itemize}
-        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único numérico.
-        \item \texttt{nome} (VARCHAR): Nome do utilizador.
-        \item \texttt{email} (VARCHAR, UNIQUE): Endereço de correio eletrónico, usado como credencial de login.
-        \item \texttt{password} (VARCHAR): Hash cifrado da palavra-passe gerado pelo BCrypt.
-        \item \texttt{perfil} (VARCHAR): Cargo ou privilégio do utilizador (\texttt{CLIENTE} ou \texttt{ADMIN}).
+        \item \textit{Limitação de Distribuição:} Num sistema distribuído, onde o backend pode ser escalado horizontalmente (múltiplas instâncias físicas da API a correr em paralelo atrás de um \textit{Load Balancer}), cada JVM terá a sua própria memória \textit{heap} isolada. Como os trincos locais não se propagam pela rede, dois servidores distintos permitiriam vendas concorrentes incorretas, gerando rutura e inconsistência de stock (*over-selling*).
+        \item \textit{Desconexão com a Base de Dados:} Uma vez que o stock não reside no Heap do Java mas sim no PostgreSQL, sincronizar apenas a execução na JVM não impede que duas transações assíncronas concorrentes leiam dados obsoletos da base de dados se as transações não forem bloqueadas a nível relacional.
     \end{itemize}
 
-    \item \textbf{Categoria (\texttt{categoria})}: Modela os grupos ou divisões de eletrodomésticos (e.g., Frigoríficos, Fogões).
+    \item \textbf{Bloqueio Pessimista na Base de Dados (Abordagem Adotada):} O sistema protege o acesso ao inventário através de bloqueio pessimista (\textit{Pessimistic Locking}), recorrendo à anotação \texttt{@Lock(LockModeType.PESSIMISTIC\_WRITE)} no método \texttt{findByIdWithPessimisticLock} do repositório. Esta instrução gera a cláusula SQL nativa \texttt{SELECT ... FOR UPDATE} na base de dados, sendo a solução ideal devido aos seguintes fatores:
     \begin{itemize}
-        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único numérico.
-        \item \texttt{nome} (VARCHAR): Designação da categoria.
-        \item \texttt{descricao} (TEXT): Nota descritiva sobre a categoria.
-    \end{itemize}
-
-    \item \textbf{Produto (\texttt{produto})}: Contém as especificações técnicas, preço e estado atual de stock de cada eletrodoméstico à venda.
-    \begin{itemize}
-        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único numérico.
-        \item \texttt{nome} (VARCHAR): Nome comercial do artigo.
-        \item \texttt{marca} (VARCHAR): Marca fabricante.
-        \item \texttt{modelo} (VARCHAR): Modelo de fabrico.
-        \item \texttt{preco} (DECIMAL): Preço unitário em Euros.
-        \item \texttt{stock} (INTEGER): Quantidade física disponível em armazém.
-        \item \texttt{eficiencia\_energetica} (VARCHAR): Classificação energética (e.g., A, B).
-        \item \texttt{categoria\_id} (INTEGER REFERENCES \texttt{categoria}): Chave estrangeira que classifica o produto.
-    \end{itemize}
-
-    \item \textbf{Venda (\texttt{venda})}: Funciona como o "cabeçalho" do documento de venda, registando a transação global efetuada por um cliente.
-    \begin{itemize}
-        \item \texttt{id} (SERIAL PRIMARY KEY): Número sequencial de fatura.
-        \item \texttt{data\_venda} (TIMESTAMP): Data e hora exatas da transação.
-        \item \texttt{valor\_total} (DECIMAL): Custo final acumulado da compra.
-        \item \texttt{utilizador\_id} (INTEGER REFERENCES \texttt{utilizador}): Chave estrangeira associando a compra a um cliente registado.
-        \item \texttt{metodo\_pagamento}, \texttt{morada}, \texttt{cidade}, \texttt{codigo\_postal}, \texttt{telefone} (VARCHAR): Informações de faturação e entrega fornecidas no checkout.
-    \end{itemize}
-
-    \item \textbf{Item de Venda (\texttt{item\_venda})}: Armazena os detalhes dos produtos contidos em cada venda.
-    \begin{itemize}
-        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único.
-        \item \texttt{venda\_id} (INTEGER REFERENCES \texttt{venda}): Associação à fatura global.
-        \item \texttt{produto\_id} (INTEGER REFERENCES \texttt{produto}): Produto adquirido.
-        \item \texttt{quantidade} (INTEGER): Unidades compradas.
-        \item \texttt{preco\_unitario} (DECIMAL): Preço unitário praticado na transação (estático, imune a futuras alterações de preço do catálogo).
-    \end{itemize}
-
-    \item \textbf{Reserva (\texttt{reservas})}: Mecanismo essencial para gerir o inventário de forma concorrente em sistemas distribuídos. Evita a ocorrência de "over-selling" e falhas de checkout ao garantir que os artigos no carrinho de compras ficam reservados para o cliente por um período de tempo predefinido (5 minutos).
-    \begin{itemize}
-        \item \texttt{id} (SERIAL PRIMARY KEY): Identificador único da reserva.
-        \item \texttt{produto\_id} (INTEGER REFERENCES \texttt{produto}): O produto reservado, cuja quantidade é temporariamente subtraída do stock geral.
-        \item \texttt{utilizador\_id} (INTEGER REFERENCES \texttt{utilizador}): Cliente detentor da reserva.
-        \item \texttt{quantidade} (INTEGER): Unidades reservadas.
-        \item \texttt{data\_expiracao} (TIMESTAMP): Limite temporal para concluir o checkout antes de a reserva ser expirada e o stock ser devolvido ao produto.
+        \item \textit{Sincronização Distribuída Inerente:} Como todas as réplicas ou instâncias da API de backend partilham a mesma base de dados PostgreSQL, o SGBD funciona como a única fonte de verdade e o coordenador distribuído de concorrência. O bloqueio é aplicado à linha física da tabela \texttt{produto}, forçando qualquer outra instância a aguardar em fila.
+        \item \textit{Consistência Forte:} Elimina o risco de anomalias de escrita concorrente (*lost updates*), pois a linha fica retida para escrita e leitura protegida até que a transação inicial efetue o respetivo \textit{commit} ou \textit{rollback}, mantendo a integridade absoluta do stock de inventário.
     \end{itemize}
 \end{enumerate}
 
-\subsection{Esquema Relacional e Mapeamentos JPA}
-As relações entre as entidades são mapeadas através de anotações JPA como \texttt{@ManyToOne}, \texttt{@OneToMany} e \texttt{@OneToOne}, estruturando os dados segundo as regras do PostgreSQL. A tabela~\ref{tab:mapeamentos} resume o mapeamento das relações:
+\paragraph{Fluxo de Reserva Dinâmica:}
+Para mitigar a frustração de ruturas de stock a meio do pagamento, o processo foi estruturado em três etapas:
+\begin{itemize}
+    \item \textbf{Adição ao carrinho:} Assim que o item entra no carrinho, o stock é deduzido e alocado provisoriamente na entidade \texttt{Reserva}.
+    \item \textbf{Finalização da compra:} No momento do checkout, o \texttt{VendaService} liquida a reserva ativa sem reprocessar o stock do produto.
+    \item \textbf{Verificação de segurança:} Falhas ou omissões na reserva forçam a validação direta no inventário livre, disparando uma \textit{Runtime Exception} caso o saldo seja insuficiente.
+\end{itemize}
 
-\begin{table}[h!]
-\centering
-\begin{tabular}{|l|l|l|p{6.5cm}|}
-\hline
-\textbf{Classe Origem} & \textbf{Atributo} & \textbf{Relação JPA} & \textbf{Propagação / Comportamento} \\ \hline
-\texttt{Utilizador} & \texttt{vendas} & \texttt{@OneToMany} & Mapeado por \texttt{utilizador}, com eliminação em cascata (\texttt{CascadeType.ALL}). \\ \hline
-\texttt{Produto} & \texttt{categoria} & \texttt{@ManyToOne} & Chave estrangeira \texttt{categoria\_id}. Permite associar a uma categoria mãe. \\ \hline
-\texttt{Venda} & \texttt{itens} & \texttt{@OneToMany} & Mapeado por \texttt{venda}, com persistência e remoção integral em cascata. \\ \hline
-\texttt{ItemVenda} & \texttt{venda} & \texttt{@ManyToOne} & Ligação direta à venda mãe (\texttt{venda\_id}). \\ \hline
-\texttt{ItemVenda} & \texttt{produto} & \texttt{@ManyToOne} & Ligação ao registo do produto (\texttt{produto\_id}). \\ \hline
-\texttt{Reserva} & \texttt{produto} & \texttt{@ManyToOne} & Relação com o produto reservado. \\ \hline
-\texttt{Reserva} & \texttt{utilizador} & \texttt{@ManyToOne} & Relação com o utilizador detentor da reserva. \\ \hline
-\end{tabular}
-\caption{Mapeamentos Objeto-Relacional (JPA) e Comportamentos em Cascata}
-\label{tab:mapeamentos}
-\end{table}
+\paragraph{Libertação Automática de Recursos:}
+Para que o stock não fique retido indefinidamente em carrinhos abandonados, o componente \texttt{ReservaCleanupTask} executa uma rotina cíclica em background. Esta tarefa identifica reservas expiradas, devolve os artigos ao inventário disponível do \texttt{Produto} e elimina o registo temporário, assegurando a rotação contínua do catálogo.
 
-Este desenho assegura que, no momento de submissão de uma encomenda, a venda e os seus respetivos itens de venda sejam guardados atomicamente numa única transação controlada pelo Spring Boot. Ao mesmo mais elevado nível, o uso de reservas temporárias previne a ocorrência de condições de corrida num cenário concorrente de compras, mantendo a integridade referencial e física de todo o stock do inventário.
-
-\section{Gestão de Catálogo e Vendas}
-[Aqui ficará a descrição das funcionalidades de produtos e compras].
-
-\section{Lógica de Negócio e Serviços}
-[Aqui ficará a descrição detalhada da lógica de negócio, incluindo a gestão de produtos, categorias e processamento de encomendas.]
-
-\section{Processamento de Vendas e Stocks}
-[Aqui ficará a descrição do sistema de controlo de stocks e o fluxo de finalização de compra.]
 
 \chapter{Testes e Validação do Sistema}
-[Aqui ficarão os resultados dos testes realizados, capturas de ecrã das funcionalidades a funcionar e validação dos requisitos técnicos.]
+Neste capítulo, é apresentada a validação prática e o plano de testes executado para comprovar a correta implementação e a robustez dos requisitos funcionais e técnicos definidos para o sistema. O processo de verificação cobriu desde o comportamento da interface de utilizador (frontend) até às regras de negócio, controlo transacional concorrente e políticas de segurança impostas pelo Spring Security (backend). As secções seguintes detalham os cenários simulados, a recolha de evidências de funcionamento e a resposta da plataforma face a acessos válidos e tentativas de intrusão.
 
 \section{Segurança e Autenticação}
 Para testar a fiabilidade do sistema de segurança concebido, foram conduzidos testes de validação focados em cenários de acesso não autorizado:
@@ -308,7 +489,14 @@ Para testar a fiabilidade do sistema de segurança concebido, foram conduzidos t
 \end{enumerate}
 
 \section{Gestão de Produtos}
-[Aqui ficará a demonstração das operações CRUD de produtos.]
+Para validar as funcionalidades de administração do catálogo, foi testada a página de \textbf{Gestão de Produtos} (acessível exclusivamente a utilizadores com o perfil \texttt{ADMIN}). As operações CRUD (Create, Read, Update, Delete) foram avaliadas da seguinte forma:
+\begin{enumerate}
+    \item \textbf{Leitura (Read):} Verificou-se que a tabela principal carrega com sucesso todos os produtos disponíveis no sistema, exibindo de forma clara a imagem, nome, categoria, preço, stock atual e eficiência energética. Adicionalmente, testou-se o feedback visual para níveis críticos de stock (destaques em estilos condicionados para rutura de stock ou stock baixo).
+    \item \textbf{Criação (Create):} Através da ação ``Novo Produto'', foi aberto um formulário modal. Procedeu-se ao preenchimento de todos os dados do novo eletrodoméstico (incluindo o URL da imagem, seleção da categoria e nível de eficiência). Ao submeter, o novo registo foi imediatamente persistido na base de dados e a tabela foi atualizada de forma imediata.
+    \item \textbf{Atualização (Update):} Utilizando a opção ``Editar'' num produto existente, o formulário modal foi pré-preenchido com os dados atuais do eletrodoméstico. Após a modificação do preço e da quantidade em stock, as alterações foram gravadas com sucesso e validadas na listagem da administração.
+    \item \textbf{Eliminação (Delete):} Foi testada a operação de remoção de um produto clicando no botão ``Eliminar''. O sistema apresentou um alerta de confirmação no browser, prevenindo eliminações acidentais. Após a confirmação, o produto foi permanentemente removido e a lista limpa da interface.
+\end{enumerate}
+Todos os pedidos efetuados durante a validação das funcionalidades incluíram o \textit{JSON Web Token} no formato Bearer associado a um administrador. Isto assegurou que as validações de autorização, asseguradas pelo \texttt{WebSecurityConfig} no lado do servidor, fossem efetuadas em harmonia com as proteções no frontend.
 
 \clearpage
 
@@ -322,7 +510,7 @@ Para versões futuras deste sistema, poderiam ser implementadas as seguintes mel
 \begin{itemize}
     \item \textbf{Sistema de Pagamento:} Integração com gateways de pagamento reais (ex: Stripe ou PayPal).
     \item \textbf{Notificações:} Implementar um sistema de notificações por email para confirmação de encomendas.
-    \item \textbf{App Móvel:} Desenvolver uma aplicação mobile nativa que consuma a mesma API REST.
+
 \end{itemize}
 
 

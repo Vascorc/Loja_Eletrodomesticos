@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categorias")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class CategoriaController {
 
     private final CategoriaService categoriaService;
@@ -30,14 +29,14 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaService.buscarPorId(id));
     }
 
-    // POST /api/categorias  (apenas ADMIN e GESTOR)
+    // POST /api/categorias  (apenas ADMIN)
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoriaDTO> criar(@RequestBody CategoriaDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaService.criar(dto));
     }
 
-    // PUT /api/categorias/{id}  (apenas ADMIN e GESTOR)
+    // PUT /api/categorias/{id}  (apenas ADMIN)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CategoriaDTO> atualizar(
@@ -46,7 +45,7 @@ public class CategoriaController {
         return ResponseEntity.ok(categoriaService.atualizar(id, dto));
     }
 
-    // DELETE /api/categorias/{id}  (apenas ADMIN e GESTOR)
+    // DELETE /api/categorias/{id}  (apenas ADMIN)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> remover(@PathVariable Long id) {

@@ -7,6 +7,7 @@ import './MinhaConta.css';
 const MinhaConta = () => {
   const [user, setUser] = useState(null);
   const [historico, setHistorico] = useState([]);
+  const [canManageProducts, setCanManageProducts] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,6 +15,7 @@ const MinhaConta = () => {
     setUser(currentUser);
 
     if (currentUser) {
+      // Carregar histórico pessoal
       fetch('http://localhost:8080/api/vendas/historico', {
         headers: {
           'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user'))?.token}`
@@ -21,6 +23,19 @@ const MinhaConta = () => {
       })
         .then(res => res.ok ? res.json() : [])
         .then(data => setHistorico(data))
+        .catch(err => console.error(err));
+
+      // Verificar permissão administrativa dinamicamente com o backend
+      fetch('http://localhost:8080/api/vendas/historico/todos', {
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user'))?.token}`
+        }
+      })
+        .then(res => {
+          if (res.ok) {
+            setCanManageProducts(true);
+          }
+        })
         .catch(err => console.error(err));
     }
   }, []);
@@ -32,8 +47,6 @@ const MinhaConta = () => {
   };
 
   if (!user) return <div className="loading">A carregar...</div>;
-
-  const canManageProducts = user.perfil === 'ADMIN';
 
   return (
     <div className="minhaconta-page">

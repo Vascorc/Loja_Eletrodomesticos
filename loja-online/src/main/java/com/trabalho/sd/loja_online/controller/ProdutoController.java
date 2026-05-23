@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/produtos")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173") // porta padrão do Vite
 public class ProdutoController {
 
     private final ProdutoService produtoService;
@@ -48,7 +47,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.listarPorCategoria(categoriaId));
     }
 
-    // POST /api/produtos  (apenas ADMIN e GESTOR)
+    // POST /api/produtos  (apenas ADMIN)
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProdutoDTO> criar(@RequestBody ProdutoDTO dto) {
@@ -56,7 +55,7 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(criado);
     }
 
-    // PUT /api/produtos/{id}  (apenas ADMIN e GESTOR)
+    // PUT /api/produtos/{id}  (apenas ADMIN)
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProdutoDTO> atualizar(
@@ -65,7 +64,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.atualizar(id, dto));
     }
 
-    // DELETE /api/produtos/{id}  (apenas ADMIN e GESTOR)
+    // DELETE /api/produtos/{id}  (apenas ADMIN)
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
@@ -74,7 +73,7 @@ public class ProdutoController {
     }
 
     // PATCH /api/produtos/{id}/stock?quantidade=5
-    // Endpoint para o colega das vendas chamar quando uma venda é concluída
+    // Endpoint para atualização direta de stock do produto
     @PatchMapping("/{id}/stock")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> atualizarStock(
